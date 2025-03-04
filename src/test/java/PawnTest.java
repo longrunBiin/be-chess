@@ -14,6 +14,6 @@ public class PawnTest {
 
     private void verifyPawn(String color){
         Pawn pawn = new Pawn(color);
-        assertThat(pawn.getColor()).isEqualTo("color");
+        assertThat(pawn.getColor()).isEqualTo(color);
     }
 }
