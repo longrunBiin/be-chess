@@ -6,11 +6,14 @@ public class PawnTest {
     @Test
     @DisplayName("흰색, 검은색 폰이 생성되어야 한다")
     public void create() {
-        String white = "white";
-        String black = "black";
-        Pawn pawn = new Pawn(white);
-        Pawn pawn2 = new Pawn(black);
-        assertThat(pawn.getColor()).isEqualTo(white);
-        assertThat(pawn2.getColor()).isEqualTo(black);
+        String[] colors = new String[]{"white", "black"};
+        for (String color : colors) {
+            verifyPawn(color);
+        }
+    }
+
+    private void verifyPawn(String color){
+        Pawn pawn = new Pawn(color);
+        assertThat(pawn.getColor()).isEqualTo("color");
     }
 }
