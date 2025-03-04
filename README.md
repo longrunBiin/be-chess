@@ -14,3 +14,8 @@
 - Junit을 이용해 테스트를 진행한다.
 - @DisplayName을 이용해 각 테스트를 명확하게 한다.
 - Pawn클래스는 색상을 생성자 매개변수로 받는다.
+
+**실수**
+- Junit설정을 했지만 Test클래스에서 import가 되지 않는 문제,
+  testImplementation으로 의존성을 설정했는데 클래스 경로를 test가 아닌 main에 만들어서 발생했다.
+ 테스트 클래스를 test/java로 이동시켜 해결
