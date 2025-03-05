@@ -9,20 +9,24 @@ import org.junit.jupiter.api.Test;
 public class PawnTest {
     @Test
     @DisplayName("흰색, 검은색 폰이 생성되어야 한다")
-    public void create() {
+    void create() {
         String[] colors = new String[]{Pawn.WHITE_COLOR, Pawn.BLACK_COLOR};
-        for (String color : colors) {
-            verifyPawn(color);
+        char[] representations = new char[]{Pawn.WHITE_REPRESENTATION, Pawn.BLACK_REPRESENTATION};
+        for (int i = 0; i < colors.length; i++) {
+            verifyPawn(colors[i], representations[i]);
         }
+
     }
     @Test
     @DisplayName("기본생성자로 생성시 흰색 폰이 생성되어야 한다.")
-    public void create_기본생성자() throws Exception {
+    void create_기본생성자() throws Exception {
         Pawn pawn = new Pawn();
-        assertEquals(Pawn.WHITE_COLOR, pawn.getColor());
+        assertThat(pawn.getColor()).isEqualTo(Pawn.WHITE_COLOR);
+        assertThat(pawn.getRepresentation()).isEqualTo(Pawn.WHITE_REPRESENTATION);
     }
-    private void verifyPawn(String color){
-        Pawn pawn = new Pawn(color);
+    void verifyPawn(final String color, final char representation) {
+        Pawn pawn = new Pawn(color, representation);
         assertThat(pawn.getColor()).isEqualTo(color);
+        assertThat(pawn.getRepresentation()).isEqualTo(representation);
     }
 }
