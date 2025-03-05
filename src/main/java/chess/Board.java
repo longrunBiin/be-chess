@@ -45,18 +45,10 @@ public class Board {
         }
     }
 
-    public String getWhitePawnsResult() {
+    public String getPawnResult(String color){
         StringBuilder sb = new StringBuilder();
         for (Pawn pawn : pawnList) {
-            if (pawn.getColor().equals(Pawn.WHITE_COLOR)) sb.append(pawn.getRepresentation());
-        }
-        return sb.toString();
-    }
-
-    public String getBlackPawnsResult() {
-        StringBuilder sb = new StringBuilder();
-        for (Pawn pawn : pawnList) {
-            if (pawn.getColor().equals(Pawn.BLACK_COLOR)) sb.append(pawn.getRepresentation());
+            if (pawn.getColor().equals(color)) sb.append(pawn.getRepresentation());
         }
         return sb.toString();
     }

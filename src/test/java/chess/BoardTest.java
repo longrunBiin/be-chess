@@ -31,8 +31,8 @@ class BoardTest {
     public void initialize() throws Exception {
         Board board = new Board();
         board.initialize();
-        assertThat(board.getWhitePawnsResult()).isEqualTo("pppppppp");
-        assertThat(board.getBlackPawnsResult()).isEqualTo("PPPPPPPP");
+        assertThat(board.getPawnResult(Pawn.WHITE_COLOR)).isEqualTo("pppppppp");
+        assertThat(board.getPawnResult(Pawn.BLACK_COLOR)).isEqualTo("PPPPPPPP");
     }
 
     private void verifyBoard(int i) {
