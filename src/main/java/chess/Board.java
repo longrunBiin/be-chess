@@ -52,8 +52,8 @@ public class Board {
 
     private void addPawnToBoard() {
         for (int i = 0; i < chessBoard.length; i++) {
-            chessBoard[1][i] = pawnList.get(i).getRepresentation();
-            chessBoard[6][i] = pawnList.get(i).getRepresentation();
+            chessBoard[1][i] = Pawn.BLACK_REPRESENTATION;
+            chessBoard[6][i] = Pawn.WHITE_REPRESENTATION;
         }
     }
 
