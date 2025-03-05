@@ -26,6 +26,15 @@ class BoardTest {
 //        board.add(new Integer(7));
     }
 
+    @Test
+    @DisplayName("보드초기화시 같은 색의 폰들이 한줄에 있어야한다.")
+    public void initialize() throws Exception {
+        Board board = new Board();
+        board.initialize();
+        assertThat(board.getWhitePawnsResult()).isEqualTo("pppppppp");
+        assertThat(board.getBlackPawnsResult()).isEqualTo("PPPPPPPP");
+    }
+
     private void verifyBoard(int i) {
         Pawn pawn = new Pawn(colors[i]);
         board.add(pawn);
