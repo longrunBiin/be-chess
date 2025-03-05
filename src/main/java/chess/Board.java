@@ -39,23 +39,34 @@ public class Board {
         return sb.toString();
     }
 
+    public void print() {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < chessBoard.length; i++) {
+            for (int j = 0; j < chessBoard.length; j++) {
+                sb.append(chessBoard[i][j]);
+            }
+            sb.append("\n");
+        }
+        System.out.println(sb);
+    }
+
     private void addPawnToBoard() {
-        for (int i = 0; i < 8; i++) {
+        for (int i = 0; i < chessBoard.length; i++) {
             chessBoard[1][i] = pawnList.get(i).getRepresentation();
             chessBoard[6][i] = pawnList.get(i).getRepresentation();
         }
     }
 
     private void addPawnToList() {
-        for (int i = 0; i < 8; i++) {
+        for (int i = 0; i < chessBoard.length; i++) {
             pawnList.add(new Pawn());
             pawnList.add(new Pawn(Pawn.BLACK_COLOR, Pawn.BLACK_REPRESENTATION));
         }
     }
 
     private void initializeEmptyBoard() {
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
+        for (int i = 0; i < chessBoard.length; i++) {
+            for (int j = 0; j < chessBoard.length; j++) {
                 chessBoard[i][j] = '.';
             }
         }
