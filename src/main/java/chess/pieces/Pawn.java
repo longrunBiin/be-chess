@@ -17,7 +17,7 @@ public class Pawn {
     }
     public Pawn() {
         color = WHITE_COLOR;
-        representation = 'p';
+        representation = '♗';
     }
 
 
