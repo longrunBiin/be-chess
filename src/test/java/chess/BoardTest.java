@@ -1,8 +1,9 @@
 package chess;
 
+import static chess.utils.StringUtils.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import chess.pieces.Pawn;
+import chess.pieces.Piece;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,16 +15,19 @@ class BoardTest {
     @BeforeEach
     void init() {
         board = new Board();
-        colors = new String[]{Pawn.WHITE_COLOR, Pawn.BLACK_COLOR};
+        colors = new String[]{Piece.WHITE_COLOR, Piece.BLACK_COLOR};
     }
     @Test
-    @DisplayName("폰이 추가될 Pawn의 수와 마지막에 추가된 폰이 맞는지 확인")
+    @DisplayName("보드가 초기화 되면 모든 말들이 생성되어야 한다.")
     void create() throws Exception {
-        for (int i = 0; i < colors.length; i++) {
-            verifyBoard(i);
-        }
-
-//        board.add(new Integer(7));
+        board.initialize();
+        assertThat(board.pieceCount()).isEqualTo(32);
+        String blankRank = appendNewLine("........");
+        assertThat(appendNewLine("♜♞♝♛♚♝♞♜") +
+                appendNewLine("♟♟♟♟♟♟♟♟") +
+                blankRank + blankRank + blankRank + blankRank +
+                appendNewLine("♗♗♗♗♗♗♗♗") +
+                appendNewLine("♖♘♗♕♔♗♘♖")).isEqualTo(board.showBoard());
     }
 
     @Test
@@ -31,15 +35,9 @@ class BoardTest {
     public void initialize() throws Exception {
         Board board = new Board();
         board.initialize();
-        assertThat(board.getPawnResult(Pawn.WHITE_COLOR)).isEqualTo("pppppppp");
-        assertThat(board.getPawnResult(Pawn.BLACK_COLOR)).isEqualTo("PPPPPPPP");
+        assertThat(board.getPawnResult(Piece.WHITE_COLOR)).isEqualTo("pppppppp");
+        assertThat(board.getPawnResult(Piece.BLACK_COLOR)).isEqualTo("PPPPPPPP");
     }
 
-    private void verifyBoard(int i) {
-        Pawn pawn = new Pawn(colors[i]);
-        board.add(pawn);
 
-        assertThat(board.size()).isEqualTo(i+1);
-        assertThat(board.findPawn(i)).isEqualTo(pawn);
-    }
 }
