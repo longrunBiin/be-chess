@@ -37,43 +37,15 @@ public class ChessGame {
         int endX = endPos.getXPos();
         int endY = endPos.getYPos();
 
-        if (sourcePiece.getName().equals(Type.KING)){
-            verifyKing(startX, startY, endX, endY);
-        }
-        else if (sourcePiece.getName().equals(Type.QUEEN)){
-            verifyQueen(startX, startY, endX, endY);
-        }
+        sourcePiece.verifyMovePosition(startX, startY, endX, endY);
+
         verifyPieceAlreadyOnBoard(endRank, endX, sourcePiece);
-    }
-
-    private void verifyQueen(int startX, int startY, int endX, int endY) {
-        if (startX == endX && startY == endY) return;
-        //직선으로만 움직이거나 1씩 증가하는 대가선으로만 움직이는 경우
-        if (endX != startX && endY != startY && Math.abs(endY - startY) != Math.abs(endX - startX))
-            throw new IllegalArgumentException("퀸은 직선과 대각선으로만 이동할 수 있습니다.");
-
-        int xDirection = getDirection(endX, startX);
-        int yDirection = getDirection(endY, startY);
-
-        verifyQueen(startX + xDirection, startY + yDirection, endX, endY);
-
-    }
-
-    private int getDirection(int end, int start) {
-        if (end-start > 0) return 1;
-        else if (end - start < 0) return -1;
-        return 0;
     }
 
     private void verifyPieceAlreadyOnBoard(Rank endRank, int endX, Piece sourcePiece) {
         if(endRank.getPieceByPosition(endX).getColor().equals(sourcePiece.getColor())){
             throw new IllegalArgumentException("같은 편이 있으면 이동할 수 없습니다.");
         }
-    }
-
-    private void verifyKing(int startX, int startY, int endX, int endY) {
-        if (endX > startX + 1 || endX < startX - 1 || endY > startY + 1 || endY < startX - 1)
-            throw new IllegalArgumentException("킹은 자신을 중심으로 8방향으로 한칸만 움직일 수 있습니다.");
     }
 
     public double calculatePoint(Color color) {
