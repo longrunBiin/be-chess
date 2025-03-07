@@ -68,15 +68,16 @@ class BoardTest {
     }
 
     @Test
-    @DisplayName("임의의 위치에 기물이 추가 되어야한다.")
+    @DisplayName("시작 위치에 있는 기물이 목표 위치로 이동되어야한다..")
     void move(){
-        board.initializeEmpty();
+        board.initialize();
 
-        String position = "b5";
-        Piece piece = Piece.createBlack(Type.ROOK);
-        board.move(position, piece);
+        String sourcePosition = "b2";
+        String targetPosition = "b3";
+        board.move(sourcePosition, targetPosition);
 
-        assertThat(board.findPiece(position)).isEqualTo(piece);
+        assertThat(board.findPiece(sourcePosition).getName()).isEqualTo(Type.NO_PIECE);
+        assertThat(board.findPiece(targetPosition).getName()).isEqualTo(Type.PAWN);
         System.out.println(board.showBoard());
     }
     @Test
