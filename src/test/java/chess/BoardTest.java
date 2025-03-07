@@ -9,6 +9,7 @@ import chess.pieces.Piece.Color;
 import chess.pieces.Piece.Type;
 import java.util.ArrayList;
 import java.util.List;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -108,6 +109,18 @@ class BoardTest {
 
         assertThat(chessGame.findPiece(sourcePosition)).isEqualTo(Piece.createBlack(Type.KING));
         assertThat(chessGame.findPiece(targetPosition)).isEqualTo(Piece.createWhite(Type.ROOK));
+    }
+
+    @Test
+    @DisplayName("이동하려는 방향이 체스판을 벗어날경우 움직이지 않고 에러를 출력한다.")
+    void moveKingToOutOfBoard() {
+        initEmptyBoardTest();
+
+        String sourcePosition = "b8";
+        String targetPosition = "b9";
+
+        Assertions.assertThrows(IllegalStateException.class, () ->chessGame.move(sourcePosition, targetPosition));
+        assertThat(chessGame.findPiece(sourcePosition)).isEqualTo(Piece.createBlack(Type.KING));
     }
 
 
