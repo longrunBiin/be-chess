@@ -1,47 +1,45 @@
 package chess;
 
 import chess.pieces.Piece;
+import chess.pieces.Piece.Color;
+import chess.pieces.Piece.Type;
 import chess.utils.StringUtils;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Board {
-    private List<Piece> pieceList;
-    private char[][] chessBoard;
+    public static final int MAX_BOARD = 8;
+    private final List<Rank> chessBoard;
 
     public Board() {
-        pieceList = new ArrayList<>();
-        chessBoard = new char[8][8];
-    }
-
-    public void add(Piece piece) {
-        pieceList.add(piece);
+        chessBoard = new ArrayList<>();
     }
 
     public int pieceCount() {
-        return pieceList.size();
+        return chessBoard.stream()
+                .mapToInt(Rank::pieceCountPerRank)
+                .sum();
     }
 
-    public Piece findPawn(int index) {
-        return pieceList.get(index);
+    public void addPiece(Rank rank) {
+        chessBoard.add(rank);
     }
-
     public void initialize() {
-        initializeEmptyBoard();
-        addPawnToList();
-        addPieceToList();
-        addPawnToBoard();
         addBlackPiecesToBoard();
+        addBlackPawnToBoard();
+        addBlankToBoard();
+        addWhitePawnToBoard();
         addWhitePiecesToBoard();
-
     }
 
-    public String getPawnResult(String color){
-        StringBuilder sb = new StringBuilder();
-        for (Piece piece : pieceList) {
-            if (piece.getColor().equals(color)) sb.append(piece.getRepresentation());
+    public String getPawnResult(Color color){
+        StringBuilder result = new StringBuilder();
+        for (Rank rank : chessBoard) {
+            result.append(rank.getPawnString(color));
         }
-        return sb.toString();
+        return result.toString();
     }
 
     public void print() {
@@ -50,9 +48,9 @@ public class Board {
 
     public String showBoard() {
         StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < chessBoard.length; i++) {
-            for (int j = 0; j < chessBoard.length; j++) {
-                sb.append(chessBoard[i][j]);
+        for (Rank rank : chessBoard) {
+            for (int j = 0; j < MAX_BOARD; j++) {
+                sb.append(rank.getRepresentationByRank(j));
             }
             sb.append(StringUtils.appendNewLine(""));
         }
@@ -60,69 +58,107 @@ public class Board {
     }
 
     private void addWhitePiecesToBoard() {
-        chessBoard[7][0] = Piece.WHITE_ROOK_REPRESENTATION;
-        chessBoard[7][1] = Piece.WHITE_KNIGHT_REPRESENTATION;
-        chessBoard[7][2] = Piece.WHITE_BISHOP_REPRESENTATION;
-        chessBoard[7][3] = Piece.WHITE_QUEEN_REPRESENTATION;
-        chessBoard[7][4] = Piece.WHITE_KING_REPRESENTATION;
-        chessBoard[7][5] = Piece.WHITE_BISHOP_REPRESENTATION;
-        chessBoard[7][6] = Piece.WHITE_KNIGHT_REPRESENTATION;
-        chessBoard[7][7] = Piece.WHITE_ROOK_REPRESENTATION;
+        List<Piece> whitePieces = new ArrayList<>();
+        whitePieces.add(Piece.createWhite(Type.ROOK));
+        whitePieces.add(Piece.createWhite(Type.KNIGHT));
+        whitePieces.add(Piece.createWhite(Type.BISHOP));
+        whitePieces.add(Piece.createWhite(Type.QUEEN));
+        whitePieces.add(Piece.createWhite(Type.KING));
+        whitePieces.add(Piece.createWhite(Type.BISHOP));
+        whitePieces.add(Piece.createWhite(Type.KNIGHT));
+        whitePieces.add(Piece.createWhite(Type.ROOK));
+
+        chessBoard.add(new Rank(whitePieces));
     }
 
     private void addBlackPiecesToBoard() {
-        chessBoard[0][0] = Piece.BLACK_ROOK_REPRESENTATION;
-        chessBoard[0][1] = Piece.BLACK_KNIGHT_REPRESENTATION;
-        chessBoard[0][2] = Piece.BLACK_BISHOP_REPRESENTATION;
-        chessBoard[0][3] = Piece.BLACK_QUEEN_REPRESENTATION;
-        chessBoard[0][4] = Piece.BLACK_KING_REPRESENTATION;
-        chessBoard[0][5] = Piece.BLACK_BISHOP_REPRESENTATION;
-        chessBoard[0][6] = Piece.BLACK_KNIGHT_REPRESENTATION;
-        chessBoard[0][7] = Piece.BLACK_ROOK_REPRESENTATION;
+        List<Piece> blackPieces = new ArrayList<>();
+        blackPieces.add(Piece.createBlack(Type.ROOK));
+        blackPieces.add(Piece.createBlack(Type.KNIGHT));
+        blackPieces.add(Piece.createBlack(Type.BISHOP));
+        blackPieces.add(Piece.createBlack(Type.QUEEN));
+        blackPieces.add(Piece.createBlack(Type.KING));
+        blackPieces.add(Piece.createBlack(Type.BISHOP));
+        blackPieces.add(Piece.createBlack(Type.KNIGHT));
+        blackPieces.add(Piece.createBlack(Type.ROOK));
+
+        chessBoard.add(new Rank(blackPieces));
     }
 
-    private void addPieceToList() {
-        pieceList.add(Piece.createWhiteKnight());
-        pieceList.add(Piece.createWhiteKnight());
-        pieceList.add(Piece.createBlackKnight());
-        pieceList.add(Piece.createBlackKnight());
+    private void addBlackPawnToBoard() {
+        addRankToChessBoard(1, Piece.createBlack(Type.PAWN));
+    }
 
-        pieceList.add(Piece.createWhiteBishop());
-        pieceList.add(Piece.createWhiteBishop());
-        pieceList.add(Piece.createBlackBishop());
-        pieceList.add(Piece.createBlackBishop());
+    private void addWhitePawnToBoard() {
+        addRankToChessBoard(1, Piece.createWhite(Type.PAWN));
+    }
 
-        pieceList.add(Piece.createWhiteRook());
-        pieceList.add(Piece.createWhiteRook());
-        pieceList.add(Piece.createBlackRook());
-        pieceList.add(Piece.createBlackRook());
+    private void addBlankToBoard() {
+        addRankToChessBoard(4, Piece.createBlank());
+    }
 
-        pieceList.add(Piece.createWhiteQueen());
-        pieceList.add(Piece.createBlackQueen());
-        pieceList.add(Piece.createWhiteKing());
-        pieceList.add(Piece.createBlackKing());
+    //보드 위에 존재하는 특정 색, 종류의 기물 갯수 리턴
+    public int pieceCountOnBoard(Color color, Type type) {
+        return chessBoard.stream()
+                .mapToInt(rank -> rank.pieceCountPerColorAndType(color, type))
+                .sum();
+    }
+
+    public Piece findPiece(String position) {
+        Position pos= new Position(position);
+
+        Rank rank = chessBoard.get(MAX_BOARD - pos.getYPos());
+        return rank.getPieceByPosition(pos.getXPos());
+    }
+
+    public void initializeEmpty() {
+        addRankToChessBoard(MAX_BOARD, Piece.createBlank());
+    }
+
+    public void move(String position, Piece piece) {
+        Position pos= new Position(position);
+
+        Rank rank = chessBoard.get(MAX_BOARD - pos.getYPos());
+        rank.movePiece(pos.getXPos(), piece);
 
     }
 
-    private void addPawnToBoard() {
-        for (int i = 0; i < chessBoard.length; i++) {
-            chessBoard[1][i] = Piece.BLACK_PAWN_REPRESENTATION;
-            chessBoard[6][i] = Piece.WHITE_PAWN_REPRESENTATION;
+    private void addRankToChessBoard(int maxBoard, Piece piece) {
+        for (int i = 0; i < maxBoard; i++) {
+            List<Piece> pieces = addPieceToList(piece);
+            chessBoard.add(new Rank(pieces));
         }
     }
 
-    private void addPawnToList() {
-        for (int i = 0; i < chessBoard.length; i++) {
-            pieceList.add(Piece.createWhitePawn());
-            pieceList.add(Piece.createBlackPawn());
+    private List<Piece> addPieceToList(Piece piece) {
+        List<Piece> rank = new ArrayList<>();
+        for (int i = 0; i < MAX_BOARD; i++) {
+            rank.add(piece);
         }
+        return rank;
     }
 
-    private void initializeEmptyBoard() {
-        for (int i = 0; i < chessBoard.length; i++) {
-            for (int j = 0; j < chessBoard.length; j++) {
-                chessBoard[i][j] = '.';
+    public double calculatePoint(Color color) {
+        double sum = chessBoard.stream()
+                .mapToDouble(rank -> rank.getPointByColor(color))
+                .sum();
+
+        int pawnCount = 0;
+        for (int i = 0; i < MAX_BOARD; i++) {
+            int count = 0;
+            for (Rank rank : chessBoard) {
+                count += rank.checkPawnCount(i, color);
             }
+            if (count >= 2) pawnCount += count;
         }
+        return sum - (pawnCount * 0.5);
+    }
+
+    public List<Piece> sortPiece(Color color) {
+        return chessBoard.stream()
+                .flatMap(rank -> rank.sortByScore(color).stream())
+                .sorted(Comparator.comparingDouble(Piece::getScore).reversed())
+                .collect(Collectors.toList());
+
     }
 }

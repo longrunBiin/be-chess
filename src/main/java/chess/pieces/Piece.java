@@ -1,88 +1,94 @@
 package chess.pieces;
 
 public class Piece {
-    public static final String WHITE_COLOR = "white";
-    public static final String BLACK_COLOR = "black";
-    public static final char WHITE_PAWN_REPRESENTATION = '♗';
-    public static final char BLACK_PAWN_REPRESENTATION = '♟';
-    public static final char WHITE_KNIGHT_REPRESENTATION = '♘';
-    public static final char BLACK_KNIGHT_REPRESENTATION = '♞';
-    public static final char WHITE_ROOK_REPRESENTATION = '♖';
-    public static final char BLACK_ROOK_REPRESENTATION = '♜';
-    public static final char WHITE_BISHOP_REPRESENTATION = '♗';
-    public static final char BLACK_BISHOP_REPRESENTATION = '♝';
-    public static final char WHITE_QUEEN_REPRESENTATION = '♕';
-    public static final char BLACK_QUEEN_REPRESENTATION = '♛';
-    public static final char WHITE_KING_REPRESENTATION = '♔';
-    public static final char BLACK_KING_REPRESENTATION = '♚';
-    public static final String CHESS_PAWN = "pawn";
-    public static final String CHESS_KNIGHT = "knight";
-    public static final String CHESS_ROOK = "rook";
-    public static final String CHESS_BISHOP = "bishop";
-    public static final String CHESS_QUEEN = "queen";
-    public static final String CHESS_KING = "king";
-    private String name;
-    private String color;
-    private char representation;
+    public enum Color {
+        WHITE, BLACK, NOCOLOR;
+    }
 
-    private Piece(String name, String color, char representation) {
+    public enum Type {
+        PAWN('♙', 1.0),
+        ROOK('♖', 5.0),
+        KNIGHT('♘', 2.5),
+        BISHOP('♗', 3.0),
+        QUEEN('♕', 9.0),
+        KING('♔', 0.0),
+        NO_PIECE('.', 0.0);
+
+        private char representation;
+        private double defaultPoint;
+
+        Type(char representation, double defaultPoint) {
+            this.representation = representation;
+            this.defaultPoint = defaultPoint;
+        }
+
+        public char getRepresentation(Color color) {
+            if (color.equals(Color.BLACK)) {
+                return getBlackRepresentation();
+            }
+            return representation;
+        }
+
+        private char getBlackRepresentation() {
+            if (this == PAWN) {
+                return '♟';  // U+265F (검은색 폰)
+            }
+            //폰을 제외한 문자들은 하얀색 + 6 -> 검은색
+            return (char) (representation + 6);
+        }
+
+        public double getDefaultPoint() {
+            return defaultPoint;
+        }
+    }
+
+    private Type name;
+    private Color color;
+
+    private Piece(Type name, Color color) {
         this.name = name;
         this.color = color;
-        this.representation = representation;
     }
 
     private Piece() {
     }
 
-    public static Piece createWhitePawn() {
-        return new Piece(CHESS_PAWN, WHITE_COLOR, WHITE_PAWN_REPRESENTATION);
-    }
-    public static Piece createBlackPawn() {
-        return new Piece(CHESS_PAWN, BLACK_COLOR, BLACK_PAWN_REPRESENTATION);
-    }
-    public static Piece createWhiteKnight() {
-        return new Piece(CHESS_KNIGHT, WHITE_COLOR, WHITE_KNIGHT_REPRESENTATION);
-    }
-    public static Piece createBlackKnight() {
-        return new Piece(CHESS_KNIGHT, BLACK_COLOR, BLACK_KNIGHT_REPRESENTATION);
-    }
-    public static Piece createWhiteRook() {
-        return new Piece(CHESS_ROOK, WHITE_COLOR, WHITE_ROOK_REPRESENTATION);
-    }
-    public static Piece createBlackRook() {
-        return new Piece(CHESS_ROOK, BLACK_COLOR, BLACK_ROOK_REPRESENTATION);
-    }
-    public static Piece createWhiteBishop() {
-        return new Piece(CHESS_BISHOP, WHITE_COLOR, WHITE_BISHOP_REPRESENTATION);
-    }
-    public static Piece createBlackBishop() {
-        return new Piece(CHESS_BISHOP, BLACK_COLOR, BLACK_BISHOP_REPRESENTATION);
-    }
-    public static Piece createWhiteQueen() {
-        return new Piece(CHESS_QUEEN, WHITE_COLOR, WHITE_QUEEN_REPRESENTATION);
-    }
-    public static Piece createBlackQueen() {
-        return new Piece(CHESS_QUEEN, BLACK_COLOR, BLACK_QUEEN_REPRESENTATION);
-    }
-    public static Piece createWhiteKing() {
-        return new Piece(CHESS_KING, WHITE_COLOR, WHITE_KING_REPRESENTATION);
-    }
-    public static Piece createBlackKing() {
-        return new Piece(CHESS_KING, BLACK_COLOR, BLACK_KING_REPRESENTATION);
+    public static Piece createBlank() {
+        return new Piece(Type.NO_PIECE, Color.NOCOLOR);
     }
 
-    public String getColor() {
+    public static Piece createWhite(Type type) {
+        return new Piece(type, Color.WHITE);
+    }
+    public static Piece createBlack(Type type) {
+        return new Piece(type, Color.BLACK);
+    }
+    public static Piece createPieceByRepresentation(char representation) {
+        for (Type value : Type.values()) {
+            if (value.getRepresentation(Color.WHITE) == representation){
+                return Piece.createWhite(value);
+            }
+            if (value.getRepresentation(Color.BLACK) == representation){
+                return Piece.createBlack(value);
+            }
+        }
+        return Piece.createBlank();
+    }
+    public Type getName() {
+        return name;
+    }
+
+    public Color getColor() {
         return color;
     }
-
-    public char getRepresentation() {
-        return representation;
+    public double getScore(){
+        return name.getDefaultPoint();
     }
 
     public boolean isWhite() {
-        return color.equals(WHITE_COLOR);
+        return color.equals(Color.WHITE);
     }
     public boolean isBlack() {
-        return color.equals(BLACK_COLOR);
+        return color.equals(Color.BLACK);
     }
 }
