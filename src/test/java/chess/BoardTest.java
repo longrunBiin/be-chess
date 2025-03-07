@@ -70,7 +70,7 @@ class BoardTest {
 
         String sourcePosition = "b2";
         String targetPosition = "b3";
-//        board.move(sourcePosition, targetPosition);
+        board.move(sourcePosition, targetPosition);
 
         assertThat(board.findPiece(sourcePosition)).isEqualTo(Piece.createBlank());
         assertThat(board.findPiece(targetPosition)).isEqualTo(Piece.createWhite(Type.PAWN));
@@ -120,7 +120,7 @@ class BoardTest {
     }
 
     private void addPiece(String position, Piece piece) {
-        board.move(position, piece);
+        board.addPiece(position, piece);
     }
 
     private void initializeBoardByString() {
@@ -140,7 +140,7 @@ class BoardTest {
                 Piece piece = Piece.createPieceByRepresentation(s.charAt(i));
                 rank.add(piece);
             }
-            board.addPiece(new Rank(rank));
+            board.addRank(new Rank(rank));
         }
     }
 
