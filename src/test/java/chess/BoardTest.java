@@ -96,6 +96,21 @@ class BoardTest {
         assertThat(chessGame.findPiece(targetPosition)).isEqualTo(Piece.createWhite(Type.KING));
     }
 
+    @Test
+    @DisplayName("이동하려는 방향에 같은 색이 있는 경우 이동하지 않는다.")
+    void moveKingToSameColor() {
+        initEmptyBoardTest();
+
+        String sourcePosition = "b8";
+        String targetPosition = "c8";
+
+        chessGame.move(sourcePosition, targetPosition);
+
+        assertThat(chessGame.findPiece(sourcePosition)).isEqualTo(Piece.createBlack(Type.KING));
+        assertThat(chessGame.findPiece(targetPosition)).isEqualTo(Piece.createWhite(Type.ROOK));
+    }
+
+
     private void initEmptyBoardTest() {
         board.initializeEmpty();
 
