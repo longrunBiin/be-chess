@@ -150,6 +150,20 @@ class BoardTest {
         System.out.println(chessView.showBoard());
     }
 
+    @Test
+    @DisplayName("퀸이 잘못된 위치로 이동할 경우 에러를 발생시킨다.")
+    void moveQueenFail() {
+        initEmptyBoardTest();
+
+        String sourcePosition = "e6";
+        String targetPosition = "a1";
+
+        assertThrows(IllegalArgumentException.class, () ->chessGame.move(sourcePosition, targetPosition));
+        assertThat(chessGame.findPiece(sourcePosition)).isEqualTo(Piece.createBlack(Type.QUEEN));
+
+        System.out.println(chessView.showBoard());
+    }
+
     private void initEmptyBoardTest() {
         board.initializeEmpty();
 
