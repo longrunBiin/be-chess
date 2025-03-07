@@ -91,11 +91,4 @@ public class Piece {
     public boolean isBlack() {
         return color.equals(Color.BLACK);
     }
-
-    public boolean isWhite() {
-        return color.equals(WHITE_COLOR);
-    }
-    public boolean isBlack() {
-        return color.equals(BLACK_COLOR);
-    }
 }
