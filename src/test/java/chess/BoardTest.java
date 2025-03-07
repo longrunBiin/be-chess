@@ -81,9 +81,22 @@ class BoardTest {
         assertThat(chessGame.findPiece(targetPosition)).isEqualTo(Piece.createWhite(Type.PAWN));
         System.out.println(chessView.showBoard());
     }
+
     @Test
-    @DisplayName("보드 위에 있는 기물들의 점수를 구한다.")
-    void calculatePoint() {
+    @DisplayName("킹은 8방향으로 한칸씩 이동할 수 있다.")
+    void moveKing() {
+        initEmptyBoardTest();
+
+        String sourcePosition = "b8";
+        String targetPosition = "c7";
+
+        chessGame.move(sourcePosition, targetPosition);
+
+        assertThat(chessGame.findPiece(sourcePosition)).isEqualTo(Piece.createBlank());
+        assertThat(chessGame.findPiece(targetPosition)).isEqualTo(Piece.createWhite(Type.KING));
+    }
+
+    private void initEmptyBoardTest() {
         board.initializeEmpty();
 
         addPiece("b6", Piece.createBlack(Type.PAWN));
@@ -95,6 +108,12 @@ class BoardTest {
         addPiece("g3", Piece.createWhite(Type.PAWN));
         addPiece("e1", Piece.createWhite(Type.ROOK));
         addPiece("f1", Piece.createWhite(Type.KING));
+    }
+
+    @Test
+    @DisplayName("보드 위에 있는 기물들의 점수를 구한다.")
+    void calculatePoint() {
+        initEmptyBoardTest();
 
         assertThat(chessGame.calculatePoint(Color.BLACK)).isCloseTo(15.0, within(0.01));
         assertThat(chessGame.calculatePoint(Color.WHITE)).isCloseTo(6.0, within(0.01));
@@ -105,17 +124,7 @@ class BoardTest {
     @Test
     @DisplayName("보드 위에 남아있는 기물들을 점수 순으로 내림차순한다.")
     void sortPieces() {
-        board.initializeEmpty();
-
-        addPiece("b6", Piece.createBlack(Type.PAWN));
-        addPiece("e6", Piece.createBlack(Type.QUEEN));
-        addPiece("b8", Piece.createBlack(Type.KING));
-        addPiece("c8", Piece.createBlack(Type.ROOK));
-
-        addPiece("g2", Piece.createWhite(Type.PAWN));
-        addPiece("g3", Piece.createWhite(Type.PAWN));
-        addPiece("e1", Piece.createWhite(Type.ROOK));
-        addPiece("f1", Piece.createWhite(Type.KING));
+        initEmptyBoardTest();
 
         List<Piece> sortedBlack = chessGame.sortPiece(Color.BLACK);
         List<Piece> sortedWhite = chessGame.sortPiece(Color.WHITE);
