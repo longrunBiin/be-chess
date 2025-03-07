@@ -3,6 +3,7 @@ package chess;
 import static chess.utils.StringUtils.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.within;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import chess.pieces.Piece;
 import chess.pieces.Piece.Color;
@@ -93,8 +94,9 @@ class BoardTest {
 
         chessGame.move(sourcePosition, targetPosition);
 
+        System.out.println(chessView.showBoard());
         assertThat(chessGame.findPiece(sourcePosition)).isEqualTo(Piece.createBlank());
-        assertThat(chessGame.findPiece(targetPosition)).isEqualTo(Piece.createWhite(Type.KING));
+        assertThat(chessGame.findPiece(targetPosition)).isEqualTo(Piece.createBlack(Type.KING));
     }
 
     @Test
@@ -105,10 +107,9 @@ class BoardTest {
         String sourcePosition = "b8";
         String targetPosition = "c8";
 
-        chessGame.move(sourcePosition, targetPosition);
-
+        assertThrows(IllegalArgumentException.class, () ->chessGame.move(sourcePosition, targetPosition));
         assertThat(chessGame.findPiece(sourcePosition)).isEqualTo(Piece.createBlack(Type.KING));
-        assertThat(chessGame.findPiece(targetPosition)).isEqualTo(Piece.createWhite(Type.ROOK));
+        assertThat(chessGame.findPiece(targetPosition)).isEqualTo(Piece.createBlack(Type.ROOK));
     }
 
     @Test
@@ -119,7 +120,7 @@ class BoardTest {
         String sourcePosition = "b8";
         String targetPosition = "b9";
 
-        Assertions.assertThrows(IllegalStateException.class, () ->chessGame.move(sourcePosition, targetPosition));
+        assertThrows(IllegalArgumentException.class, () ->chessGame.move(sourcePosition, targetPosition));
         assertThat(chessGame.findPiece(sourcePosition)).isEqualTo(Piece.createBlack(Type.KING));
     }
 
