@@ -23,7 +23,7 @@ public class Board {
                 .sum();
     }
 
-    public void addPiece(Rank rank) {
+    public void addRank(Rank rank) {
         chessBoard.add(rank);
     }
     public void initialize() {
@@ -167,5 +167,12 @@ public class Board {
                 .sorted(Comparator.comparingDouble(Piece::getScore).reversed())
                 .collect(Collectors.toList());
 
+    }
+
+    public void addPiece(String position, Piece piece) {
+        Position pos= new Position(position);
+
+        Rank rank = chessBoard.get(MAX_BOARD - pos.getYPos());
+        rank.movePiece(pos.getXPos(), piece);
     }
 }
