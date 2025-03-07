@@ -94,9 +94,9 @@ class BoardTest {
 
         chessGame.move(sourcePosition, targetPosition);
 
-        System.out.println(chessView.showBoard());
         assertThat(chessGame.findPiece(sourcePosition)).isEqualTo(Piece.createBlank());
         assertThat(chessGame.findPiece(targetPosition)).isEqualTo(Piece.createBlack(Type.KING));
+        System.out.println(chessView.showBoard());
     }
 
     @Test
@@ -124,6 +124,31 @@ class BoardTest {
         assertThat(chessGame.findPiece(sourcePosition)).isEqualTo(Piece.createBlack(Type.KING));
     }
 
+    @Test
+    @DisplayName("퀸은 직선과 대각선 방향으로 움직인다.")
+    void moveQueen() {
+        initEmptyBoardTest();
+
+        String sourcePosition = "e6";
+        String targetPosition = "e1";
+
+        chessGame.move(sourcePosition, targetPosition);
+
+        assertThat(chessGame.findPiece(sourcePosition)).isEqualTo(Piece.createBlank());
+        assertThat(chessGame.findPiece(targetPosition)).isEqualTo(Piece.createBlack(Type.QUEEN));
+
+        System.out.println(chessView.showBoard());
+
+        sourcePosition = "e1";
+         targetPosition = "a5";
+
+        chessGame.move(sourcePosition, targetPosition);
+
+        assertThat(chessGame.findPiece(sourcePosition)).isEqualTo(Piece.createBlank());
+        assertThat(chessGame.findPiece(targetPosition)).isEqualTo(Piece.createBlack(Type.QUEEN));
+
+        System.out.println(chessView.showBoard());
+    }
 
     private void initEmptyBoardTest() {
         board.initializeEmpty();
