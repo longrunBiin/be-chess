@@ -24,12 +24,32 @@ public class ChessGame {
         Rank endRank = chessBoard.get(MAX_BOARD - endPos.getYPos());
         //시작위치에 있는 기물 가져오기
         Piece sourcePiece = startRank.getPieceByPosition(startPos.getXPos());
-
+        if (sourcePiece.getName().equals(Type.KING)){
+            verifyKing(startPos, endPos);
+        }
+        verifyPieceAlreadyOnBoard(endRank, endPos, sourcePiece);
         //기물을 옮긴 후 시작 위치를 공백으로 설정
         endRank.movePiece(endPos.getXPos(), sourcePiece);
         startRank.movePiece(startPos.getXPos(), Piece.createBlank());
 
     }
+
+    private static void verifyPieceAlreadyOnBoard(Rank endRank, Position endPos, Piece sourcePiece) {
+        if(endRank.getPieceByPosition(endPos.getXPos()).getColor().equals(sourcePiece.getColor())){
+            throw new IllegalArgumentException("같은 편이 있으면 이동할 수 없습니다.");
+        }
+    }
+
+    private void verifyKing(Position startPos, Position endPos) {
+        int startX = startPos.getXPos();
+        int startY = startPos.getYPos();
+        int endX = endPos.getXPos();
+        int endY = endPos.getYPos();
+
+        if (endX > startX + 1 || endX < startX - 1 || endY > startY + 1 || endY < startX - 1)
+            throw new IllegalArgumentException("킹은 자신을 중심으로 8방향으로 한칸만 움직일 수 있습니다.");
+    }
+
     public double calculatePoint(Color color) {
         double sum = chessBoard.stream()
                 .mapToDouble(rank -> rank.getPointByColor(color))
