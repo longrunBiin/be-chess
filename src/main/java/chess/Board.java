@@ -121,8 +121,10 @@ public class Board {
 
         Rank startRank = chessBoard.get(MAX_BOARD - startPos.getYPos());
         Rank endRank = chessBoard.get(MAX_BOARD - endPos.getYPos());
+        //시작위치에 있는 기물 가져오기
         Piece sourcePiece = startRank.getPieceByPosition(startPos.getXPos());
 
+        //기물을 옮긴 후 시작 위치를 공백으로 설정
         endRank.movePiece(endPos.getXPos(), sourcePiece);
         startRank.movePiece(startPos.getXPos(), Piece.createBlank());
 
