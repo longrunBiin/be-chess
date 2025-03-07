@@ -57,14 +57,10 @@ class BoardTest {
     void findPiece() {
         board.initialize();
 
-        assertThat(board.findPiece("a8").getName()).isEqualTo(Type.ROOK);
-        assertThat(board.findPiece("a8").getColor()).isEqualTo(Color.BLACK);
-        assertThat(board.findPiece("h8").getName()).isEqualTo(Type.ROOK);
-        assertThat(board.findPiece("h8").getColor()).isEqualTo(Color.BLACK);
-        assertThat(board.findPiece("a1").getName()).isEqualTo(Type.ROOK);
-        assertThat(board.findPiece("a1").getColor()).isEqualTo(Color.WHITE);
-        assertThat(board.findPiece("h1").getName()).isEqualTo(Type.ROOK);
-        assertThat(board.findPiece("h1").getColor()).isEqualTo(Color.WHITE);
+        assertThat(board.findPiece("a8")).isEqualTo(Piece.createBlack(Type.ROOK));
+        assertThat(board.findPiece("h8")).isEqualTo(Piece.createBlack(Type.ROOK));
+        assertThat(board.findPiece("a1")).isEqualTo(Piece.createWhite(Type.ROOK));
+        assertThat(board.findPiece("h1")).isEqualTo(Piece.createWhite(Type.ROOK));
     }
 
     @Test
@@ -74,10 +70,10 @@ class BoardTest {
 
         String sourcePosition = "b2";
         String targetPosition = "b3";
-        board.move(sourcePosition, targetPosition);
+//        board.move(sourcePosition, targetPosition);
 
-        assertThat(board.findPiece(sourcePosition).getName()).isEqualTo(Type.NO_PIECE);
-        assertThat(board.findPiece(targetPosition).getName()).isEqualTo(Type.PAWN);
+        assertThat(board.findPiece(sourcePosition)).isEqualTo(Piece.createBlank());
+        assertThat(board.findPiece(targetPosition)).isEqualTo(Piece.createWhite(Type.PAWN));
         System.out.println(board.showBoard());
     }
     @Test

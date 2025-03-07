@@ -1,5 +1,7 @@
 package chess.pieces;
 
+import java.util.Objects;
+
 public class Piece {
     public enum Color {
         WHITE, BLACK, NOCOLOR;
@@ -90,5 +92,18 @@ public class Piece {
     }
     public boolean isBlack() {
         return color.equals(Color.BLACK);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Piece piece = (Piece) obj;
+        return color == piece.color && name == piece.name;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(color, name);
     }
 }
