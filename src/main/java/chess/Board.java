@@ -115,11 +115,16 @@ public class Board {
         addRankToChessBoard(MAX_BOARD, Piece.createBlank());
     }
 
-    public void move(String position, Piece piece) {
-        Position pos= new Position(position);
+    public void move(String sourcePosition, String targetPosition) {
+        Position startPos= new Position(sourcePosition);
+        Position endPos= new Position(targetPosition);
 
-        Rank rank = chessBoard.get(MAX_BOARD - pos.getYPos());
-        rank.movePiece(pos.getXPos(), piece);
+        Rank startRank = chessBoard.get(MAX_BOARD - startPos.getYPos());
+        Rank endRank = chessBoard.get(MAX_BOARD - endPos.getYPos());
+        Piece sourcePiece = startRank.getPieceByPosition(startPos.getXPos());
+
+        endRank.movePiece(endPos.getXPos(), sourcePiece);
+        startRank.movePiece(startPos.getXPos(), Piece.createBlank());
 
     }
 
