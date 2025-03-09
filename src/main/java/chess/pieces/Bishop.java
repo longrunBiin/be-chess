@@ -26,7 +26,7 @@ public class Bishop extends Piece{
 
         // 대각선 이동 체크
         if (Math.abs(dx) == Math.abs(dy)) {
-            return Direction.everyDirection().stream()
+            return directionList.stream()
                     .filter(d -> (d.getXDegree() == Integer.signum(dx) && d.getYDegree() == Integer.signum(dy)))
                     .findFirst()
                     .orElse(null);

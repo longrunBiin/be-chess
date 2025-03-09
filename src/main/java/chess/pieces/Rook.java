@@ -26,7 +26,7 @@ public class Rook extends Piece{
 
         // 직선 이동 체크
         if (dx == 0 || dy == 0) {
-            return Direction.everyDirection().stream()
+            return directionList.stream()
                     .filter(d -> (d.getXDegree() == Integer.signum(dx) && d.getYDegree() == Integer.signum(dy)))
                     .findFirst()
                     .orElse(null);
