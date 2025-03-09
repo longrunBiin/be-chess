@@ -13,16 +13,12 @@ public class Knight extends Piece{
         int dy = endY - startY;
 
         Direction moveDirection = findDirection(dx, dy);
-        if (moveDirection == null || !directionList.contains(moveDirection)) {
-            throw new IllegalArgumentException("나이트는 한칸 전진 후 대각선으로 이동할 수 있습니다.");
-        }
+        checkPieceCanMove(moveDirection);
     }
-    private Direction findDirection(int dx, int dy) {
+    @Override
+    protected Direction findDirection(int dx, int dy) {
         if (dx == 0 && dy == 0) return null; // 자기 위치 유지
 
-        return directionList.stream()
-                .filter(d -> (d.getXDegree() == dx && d.getYDegree() == dy))
-                .findFirst()
-                .orElse(null);
+        return getDirectionByCurrentExactly(dx, dy);
     }
 }

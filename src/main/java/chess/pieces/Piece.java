@@ -113,7 +113,30 @@ abstract public class Piece {
     public boolean isBlack() {
         return color.equals(Color.BLACK);
     }
+
     abstract public void verifyMovePosition(int startX, int startY, int endX, int endY);
+
+    abstract protected Direction findDirection(int dx, int dy);
+
+    protected Direction getDirectionByCurrent(int dx, int dy) {
+        return Direction.everyDirection().stream()
+                .filter(d -> (d.getXDegree() == Integer.signum(dx) && d.getYDegree() == Integer.signum(dy)))
+                .findFirst()
+                .orElse(null);
+    }
+
+    protected Direction getDirectionByCurrentExactly(int dx, int dy) {
+        return directionList.stream()
+                .filter(d -> (d.getXDegree() == dx && d.getYDegree() == dy))
+                .findFirst()
+                .orElse(null);
+    }
+
+    protected void checkPieceCanMove(Direction moveDirection) {
+        if (moveDirection == null || !directionList.contains(moveDirection)) {
+            throw new IllegalArgumentException("기물의 이동 규칙을 위반했습니다.");
+        }
+    }
 
     @Override
     public boolean equals(Object obj) {

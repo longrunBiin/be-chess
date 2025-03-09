@@ -14,16 +14,12 @@ public class King extends Piece{
         int dy = endY - startY;
 
         Direction moveDirection = findDirection(dx, dy);
-        if (moveDirection == null || !directionList.contains(moveDirection)) {
-            throw new IllegalArgumentException("킹은 자신을 중심으로 8방향으로 한칸씩 이동할 수 있습니다.");
-        }
+        checkPieceCanMove(moveDirection);
     }
-    private Direction findDirection(int dx, int dy) {
+    @Override
+    protected Direction findDirection(int dx, int dy) {
         if (dx == 0 && dy == 0) return null; // 자기 위치 유지
 
-        return directionList.stream()
-                .filter(d -> (d.getXDegree() == dx && d.getYDegree() == dy))
-                .findFirst()
-                .orElse(null);
+        return getDirectionByCurrentExactly(dx, dy);
     }
 }

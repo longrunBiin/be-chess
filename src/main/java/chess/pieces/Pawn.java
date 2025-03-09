@@ -20,9 +20,8 @@ public class Pawn extends Piece{
         int dy = endY - startY;
 
         Direction moveDirection = findDirection(dx, dy);
-        if (moveDirection == null || !directionList.contains(moveDirection)) {
-            throw new IllegalArgumentException("폰의 이동 규칙을 위반했습니다.");
-        }
+        checkPieceCanMove(moveDirection);
+
         if (!hasMoved) {
             if (Math.abs(dy) == 2 && dx == 0) {
                 // 2칸 전진 이동 (첫 번째만 가능)
@@ -43,14 +42,13 @@ public class Pawn extends Piece{
 
         throw new IllegalArgumentException("폰의 이동 규칙을 위반했습니다.");
     }
-    private Direction findDirection(int dx, int dy) {
+    @Override
+    protected Direction findDirection(int dx, int dy) {
         if (dx == 0 && dy == 0) return null; // 자기 위치 유지
 
-        return directionList.stream()
-                .filter(d -> (d.getXDegree() == dx && d.getYDegree() == dy))
-                .findFirst()
-                .orElse(null);
+        return getDirectionByCurrentExactly(dx, dy);
     }
+
 
 }
 
