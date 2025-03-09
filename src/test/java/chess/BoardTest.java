@@ -75,8 +75,8 @@ class BoardTest extends TestUtil{
     void calculatePoint() {
         initEmptyBoardTest();
 
-        assertThat(chessGame.calculatePoint(Color.BLACK)).isCloseTo(15.0, within(0.01));
-        assertThat(chessGame.calculatePoint(Color.WHITE)).isCloseTo(6.0, within(0.01));
+        assertThat(chessGame.calculatePoint(Color.BLACK)).isCloseTo(20.5, within(0.01));
+        assertThat(chessGame.calculatePoint(Color.WHITE)).isCloseTo(8.5, within(0.01));
 
         System.out.println(chessView.showBoard());
     }
@@ -89,8 +89,8 @@ class BoardTest extends TestUtil{
         List<Piece> sortedBlack = chessGame.sortPiece(Color.BLACK);
         List<Piece> sortedWhite = chessGame.sortPiece(Color.WHITE);
 
-        assertThat(sortedBlack).extracting(Piece::getName).containsExactly(Type.QUEEN, Type.ROOK, Type.PAWN, Type.KING);
-        assertThat(sortedWhite).extracting(Piece::getName).containsExactly(Type.ROOK, Type.PAWN, Type.PAWN, Type.KING);
+        assertThat(sortedBlack).extracting(Piece::getName).containsExactly(Type.QUEEN, Type.ROOK, Type.BISHOP, Type.KNIGHT, Type.PAWN, Type.KING);
+        assertThat(sortedWhite).extracting(Piece::getName).containsExactly(Type.ROOK, Type.KNIGHT, Type.PAWN, Type.PAWN, Type.KING);
     }
 
     private void initializeBoardByString() {
