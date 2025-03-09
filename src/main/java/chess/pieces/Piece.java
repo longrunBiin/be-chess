@@ -1,8 +1,10 @@
 package chess.pieces;
 
+import chess.Direction;
+import java.util.List;
 import java.util.Objects;
 
-public class Piece {
+abstract public class Piece {
     public enum Color {
         WHITE, BLACK, NOCOLOR;
     }
@@ -46,24 +48,42 @@ public class Piece {
 
     private Type name;
     private Color color;
+    protected List<Direction> directionList;
 
-    private Piece(Type name, Color color) {
+    Piece(Type name, Color color, List<Direction> directionList) {
         this.name = name;
         this.color = color;
+        this.directionList = directionList;
     }
 
     private Piece() {
     }
 
     public static Piece createBlank() {
-        return new Piece(Type.NO_PIECE, Color.NOCOLOR);
+        return new Blank();
     }
 
     public static Piece createWhite(Type type) {
-        return new Piece(type, Color.WHITE);
+        return switch (type) {
+            case KING -> new King(type, Color.WHITE);
+            case QUEEN -> new Queen(type, Color.WHITE);
+            case ROOK -> new Rook(type, Color.WHITE);
+            case BISHOP -> new Bishop(type, Color.WHITE);
+            case KNIGHT -> new Knight(type, Color.WHITE);
+            case PAWN -> new Pawn(type, Color.WHITE);
+            default -> new Blank();
+        };
     }
     public static Piece createBlack(Type type) {
-        return new Piece(type, Color.BLACK);
+        return switch (type) {
+            case KING -> new King(type, Color.BLACK);
+            case QUEEN -> new Queen(type, Color.BLACK);
+            case ROOK -> new Rook(type, Color.BLACK);
+            case BISHOP -> new Bishop(type, Color.BLACK);
+            case KNIGHT -> new Knight(type, Color.BLACK);
+            case PAWN -> new Pawn(type, Color.BLACK);
+            default -> new Blank();
+        };
     }
     public static Piece createPieceByRepresentation(char representation) {
         for (Type value : Type.values()) {
@@ -93,6 +113,7 @@ public class Piece {
     public boolean isBlack() {
         return color.equals(Color.BLACK);
     }
+    abstract public void verifyMovePosition(int startX, int startY, int endX, int endY);
 
     @Override
     public boolean equals(Object obj) {
