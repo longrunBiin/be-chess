@@ -11,7 +11,7 @@ public class Position {
     }
 
     private void verifyBoardPosition(int xPos, int yPos) {
-        if (xPos < 0 || xPos > Board.MAX_BOARD || yPos < 0 || yPos > Board.MAX_BOARD)
+        if (xPos < 0 || xPos > Board.MAX_BOARD - 1 || yPos <= 0 || yPos > Board.MAX_BOARD)
             throw new IllegalArgumentException("이동 위치가 체스판을 벗어납니다");
     }
 
