@@ -33,6 +33,7 @@ public abstract class TestUtil {
         addPiece("g3", Piece.createWhite(Type.PAWN));
         addPiece("e1", Piece.createWhite(Type.ROOK));
         addPiece("f1", Piece.createWhite(Type.KING));
+        chessView.print();
     }
     protected void addPiece(String position, Piece piece) {
         chessGame.addPiece(position, piece);
