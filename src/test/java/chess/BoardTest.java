@@ -3,30 +3,17 @@ package chess;
 import static chess.utils.StringUtils.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.within;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import chess.pieces.Piece;
 import chess.pieces.Piece.Color;
 import chess.pieces.Piece.Type;
 import java.util.ArrayList;
 import java.util.List;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-class BoardTest {
-    private Board board;
-    private ChessGame chessGame;
-    private ChessView chessView;
+class BoardTest extends TestUtil{
 
-    @BeforeEach
-    void init() {
-        List<Rank> chessBoard = new ArrayList<>();
-        board = new Board(chessBoard);
-        chessGame = new ChessGame(chessBoard);
-        chessView = new ChessView(chessBoard);
-    }
     @Test
     @DisplayName("보드가 초기화 되면 모든 말들이 생성되어야 한다.")
     void create() {
@@ -83,21 +70,6 @@ class BoardTest {
         assertThat(chessGame.findPiece(targetPosition)).isEqualTo(Piece.createWhite(Type.PAWN));
         System.out.println(chessView.showBoard());
     }
-
-    private void initEmptyBoardTest() {
-        board.initializeEmpty();
-
-        addPiece("b6", Piece.createBlack(Type.PAWN));
-        addPiece("e6", Piece.createBlack(Type.QUEEN));
-        addPiece("b8", Piece.createBlack(Type.KING));
-        addPiece("c8", Piece.createBlack(Type.ROOK));
-
-        addPiece("g2", Piece.createWhite(Type.PAWN));
-        addPiece("g3", Piece.createWhite(Type.PAWN));
-        addPiece("e1", Piece.createWhite(Type.ROOK));
-        addPiece("f1", Piece.createWhite(Type.KING));
-    }
-
     @Test
     @DisplayName("보드 위에 있는 기물들의 점수를 구한다.")
     void calculatePoint() {
@@ -119,10 +91,6 @@ class BoardTest {
 
         assertThat(sortedBlack).extracting(Piece::getName).containsExactly(Type.QUEEN, Type.ROOK, Type.PAWN, Type.KING);
         assertThat(sortedWhite).extracting(Piece::getName).containsExactly(Type.ROOK, Type.PAWN, Type.PAWN, Type.KING);
-    }
-
-    private void addPiece(String position, Piece piece) {
-        chessGame.addPiece(position, piece);
     }
 
     private void initializeBoardByString() {
