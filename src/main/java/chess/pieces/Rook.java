@@ -13,7 +13,7 @@ public class Rook extends Piece{
         int dy = endY - startY;
 
         if (startX == endX && startY == endY) return;
-        //직선으로만 움직이거나 1씩 증가하는 대가선으로만 움직이는 경우
+
         Direction moveDirection = findDirection(dx, dy);
         if (moveDirection == null || !directionList.contains(moveDirection)) {
             throw new IllegalArgumentException("룩은 직선으로만 이동할 수 있습니다.");
