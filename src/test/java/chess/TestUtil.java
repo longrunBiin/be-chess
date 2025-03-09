@@ -25,7 +25,10 @@ public abstract class TestUtil {
         addPiece("e6", Piece.createBlack(Type.QUEEN));
         addPiece("b8", Piece.createBlack(Type.KING));
         addPiece("c8", Piece.createBlack(Type.ROOK));
+        addPiece("a5", Piece.createBlack(Type.BISHOP));
+        addPiece("a4", Piece.createBlack(Type.KNIGHT));
 
+        addPiece("h2", Piece.createWhite(Type.KNIGHT));
         addPiece("g2", Piece.createWhite(Type.PAWN));
         addPiece("g3", Piece.createWhite(Type.PAWN));
         addPiece("e1", Piece.createWhite(Type.ROOK));
