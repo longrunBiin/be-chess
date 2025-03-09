@@ -2,6 +2,7 @@ package chess;
 
 import static chess.Board.MAX_BOARD;
 
+import chess.pieces.Pawn;
 import chess.pieces.Piece;
 import chess.pieces.Piece.Color;
 import chess.pieces.Piece.Type;
@@ -39,6 +40,11 @@ public class ChessGame {
 
         sourcePiece.verifyMovePosition(startX, startY, endX, endY);
 
+        // 폰인 경우 대각선 이동은 적을 잡을 때만 가능
+        if (sourcePiece.getName().equals(Type.PAWN) && Math.abs(endX - startX) == 1 && Math.abs(endY - startY) == 1){
+            canCapture(endRank, endX, sourcePiece);
+        }
+
         verifyPieceAlreadyOnBoard(endRank, endX, sourcePiece);
     }
 
@@ -47,7 +53,15 @@ public class ChessGame {
             throw new IllegalArgumentException("같은 편이 있으면 이동할 수 없습니다.");
         }
     }
+    // 대각선에 적이 있는지 체크
+    private void canCapture(Rank endRank, int endX, Piece sourcePiece) {
+        Piece targetPiece = endRank.getPieceByPosition(endX);
 
+        // 대각선으로 적을 잡을 수 있는지 확인
+        if (targetPiece.getName().equals(Type.NO_PIECE) || targetPiece.getColor().equals(sourcePiece.getColor())) {
+            throw new IllegalArgumentException("대각선으로 적을 잡을 수 없습니다.");
+        }
+    }
     public double calculatePoint(Color color) {
         double sum = chessBoard.stream()
                 .mapToDouble(rank -> rank.getPointByColor(color))
