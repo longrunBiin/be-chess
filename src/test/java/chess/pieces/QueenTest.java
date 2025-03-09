@@ -26,7 +26,7 @@ public class QueenTest extends TestUtil {
         System.out.println(chessView.showBoard());
 
         sourcePosition = "e1";
-        targetPosition = "a5";
+        targetPosition = "b4";
 
         chessGame.move(sourcePosition, targetPosition);
 
