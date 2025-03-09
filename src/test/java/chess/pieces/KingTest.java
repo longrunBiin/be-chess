@@ -3,15 +3,8 @@ package chess.pieces;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import chess.Board;
-import chess.ChessGame;
-import chess.ChessView;
-import chess.Rank;
 import chess.TestUtil;
 import chess.pieces.Piece.Type;
-import java.util.ArrayList;
-import java.util.List;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
