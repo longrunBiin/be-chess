@@ -13,18 +13,31 @@ public class Queen extends Piece{
 
         if (startX == endX && startY == endY) return;
         //직선으로만 움직이거나 1씩 증가하는 대가선으로만 움직이는 경우
-        if (dx != 0 && dy != 0 && Math.abs(endY - startY) != Math.abs(endX - startX))
+        Direction moveDirection = findDirection(dx, dy);
+        if (moveDirection == null || !directionList.contains(moveDirection)) {
             throw new IllegalArgumentException("퀸은 직선과 대각선으로만 이동할 수 있습니다.");
+        }
 
-        int xDirection = getDirection(endX, startX);
-        int yDirection = getDirection(endY, startY);
-
-        verifyMovePosition(startX + xDirection, startY + yDirection, endX, endY);
+        verifyMovePosition(startX + moveDirection.getXDegree(), startY + moveDirection.getYDegree(), endX, endY);
     }
-    private int getDirection(int end, int start) {
-        if (end-start > 0) return 1;
-        else if (end - start < 0) return -1;
-        return 0;
-    }
+    private Direction findDirection(int dx, int dy) {
+        if (dx == 0 && dy == 0) return null; // 자기 위치 유지
 
+        // 직선 이동 체크
+        if (dx == 0 || dy == 0) {
+            return Direction.everyDirection().stream()
+                    .filter(d -> (d.getXDegree() == Integer.signum(dx) && d.getYDegree() == Integer.signum(dy)))
+                    .findFirst()
+                    .orElse(null);
+        }
+
+        // 대각선 이동 체크
+        if (Math.abs(dx) == Math.abs(dy)) {
+            return Direction.everyDirection().stream()
+                    .filter(d -> (d.getXDegree() == Integer.signum(dx) && d.getYDegree() == Integer.signum(dy)))
+                    .findFirst()
+                    .orElse(null);
+        }
+        return null;
+    }
 }
