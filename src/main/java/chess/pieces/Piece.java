@@ -2,6 +2,7 @@ package chess.pieces;
 
 import chess.Direction;
 import chess.Position;
+import chess.Rank;
 import java.util.List;
 import java.util.Objects;
 
@@ -115,7 +116,7 @@ abstract public class Piece {
         return color.equals(Color.BLACK);
     }
 
-    abstract public void verifyMovePosition(Position startPos, Position endPos, Piece sourcePiece, Piece targetPiece);
+    abstract public void verifyMovePosition(Position startPos, Position endPos, Piece sourcePiece, List<Rank> chessBoard);
 
     abstract protected Direction findDirection(int dx, int dy);
 

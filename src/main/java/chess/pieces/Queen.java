@@ -1,7 +1,11 @@
 package chess.pieces;
 
+import static chess.Board.MAX_BOARD;
+
 import chess.Direction;
 import chess.Position;
+import chess.Rank;
+import java.util.List;
 
 public class Queen extends Piece{
     public Queen(Type type, Color color) {
@@ -9,7 +13,7 @@ public class Queen extends Piece{
     }
 
     @Override
-    public void verifyMovePosition(Position startPos, Position endPos, Piece sourcePiece, Piece targetPiece) {
+    public void verifyMovePosition(Position startPos, Position endPos, Piece sourcePiece, List<Rank> chessBoard) {
         int dx = endPos.getXPos() - startPos.getXPos();
         int dy = endPos.getYPos() - startPos.getYPos();
 
@@ -18,10 +22,14 @@ public class Queen extends Piece{
         Direction moveDirection = findDirection(dx, dy);
         checkPieceCanMove(moveDirection, sourcePiece);
 
-        verifyPieceAlreadyOnBoard(sourcePiece, targetPiece);
         Position next = new Position(startPos.getXPos() + moveDirection.getXDegree(),
                 startPos.getYPos() + moveDirection.getYDegree());
-        verifyMovePosition(next, endPos, sourcePiece, targetPiece);
+
+        Rank endRank = chessBoard.get(MAX_BOARD - next.getYPos());
+        Piece targetPiece = endRank.getPieceByPosition(next.getXPos());
+        verifyPieceAlreadyOnBoard(sourcePiece, targetPiece);
+
+        verifyMovePosition(next, endPos, sourcePiece, chessBoard);
     }
 
     @Override
