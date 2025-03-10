@@ -2,7 +2,6 @@ package chess;
 
 import static chess.Board.MAX_BOARD;
 
-import chess.pieces.Pawn;
 import chess.pieces.Piece;
 import chess.pieces.Piece.Color;
 import chess.pieces.Piece.Type;
@@ -42,7 +41,7 @@ public class ChessGame {
         }
     }
 
-    private void endTurn() {
+    public void endTurn() {
         whiteTurn = !whiteTurn;
         blackTurn = !blackTurn;
     }
