@@ -25,38 +25,29 @@ public class ChessGame {
         Rank endRank = chessBoard.get(MAX_BOARD - endPos.getYPos());
         //시작위치에 있는 기물 가져오기
         Piece sourcePiece = startRank.getPieceByPosition(startPos.getXPos());
-        verifyPositionByPiece(startPos, sourcePiece, endPos, endRank);
+        Piece targetPiece = endRank.getPieceByPosition(endPos.getXPos());
+        verifyPositionByPiece(startPos, endPos, sourcePiece, targetPiece);
         //기물을 옮긴 후 시작 위치를 공백으로 설정
         endRank.movePiece(endPos.getXPos(), sourcePiece);
         startRank.movePiece(startPos.getXPos(), Piece.createBlank());
 
     }
 
-    private void verifyPositionByPiece(Position startPos, Piece sourcePiece, Position endPos, Rank endRank) {
+    private void verifyPositionByPiece(Position startPos, Position endPos, Piece sourcePiece, Piece targetPiece) {
         int startX = startPos.getXPos();
         int startY= startPos.getYPos();
         int endX = endPos.getXPos();
         int endY = endPos.getYPos();
 
-        sourcePiece.verifyMovePosition(startX, startY, endX, endY);
+        sourcePiece.verifyMovePosition(startPos, endPos, sourcePiece, targetPiece);
 
         // 폰인 경우 대각선 이동은 적을 잡을 때만 가능
         if (sourcePiece.getName().equals(Type.PAWN) && Math.abs(endX - startX) == 1 && Math.abs(endY - startY) == 1){
-            canCapture(endRank, endX, sourcePiece);
-        }
-
-        verifyPieceAlreadyOnBoard(endRank, endX, sourcePiece);
-    }
-
-    private void verifyPieceAlreadyOnBoard(Rank endRank, int endX, Piece sourcePiece) {
-        if(endRank.getPieceByPosition(endX).getColor().equals(sourcePiece.getColor())){
-            throw new IllegalArgumentException("같은 편이 있으면 이동할 수 없습니다.");
+            canCapture(sourcePiece, targetPiece);
         }
     }
     // 대각선에 적이 있는지 체크
-    private void canCapture(Rank endRank, int endX, Piece sourcePiece) {
-        Piece targetPiece = endRank.getPieceByPosition(endX);
-
+    private void canCapture(Piece sourcePiece, Piece targetPiece) {
         // 대각선으로 적을 잡을 수 있는지 확인
         if (targetPiece.getName().equals(Type.NO_PIECE) || targetPiece.getColor().equals(sourcePiece.getColor())) {
             throw new IllegalArgumentException("대각선으로 적을 잡을 수 없습니다.");
