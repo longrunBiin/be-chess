@@ -1,5 +1,7 @@
 package chess;
 
+import java.util.Objects;
+
 public class Position {
     private int xPos;
     private int yPos;
@@ -26,5 +28,22 @@ public class Position {
 
     public int getYPos() {
         return yPos;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) {
+            return true;
+        }
+        if (object == null || getClass() != object.getClass()) {
+            return false;
+        }
+        Position position = (Position) object;
+        return xPos == position.xPos && yPos == position.yPos;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(xPos, yPos);
     }
 }
