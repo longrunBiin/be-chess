@@ -25,29 +25,31 @@ public class ChessGame {
         Rank endRank = chessBoard.get(MAX_BOARD - endPos.getYPos());
         //시작위치에 있는 기물 가져오기
         Piece sourcePiece = startRank.getPieceByPosition(startPos.getXPos());
-        Piece targetPiece = endRank.getPieceByPosition(endPos.getXPos());
-        verifyPositionByPiece(startPos, endPos, sourcePiece, targetPiece);
+
+        verifyPositionByPiece(startPos, endPos, sourcePiece, chessBoard);
         //기물을 옮긴 후 시작 위치를 공백으로 설정
         endRank.movePiece(endPos.getXPos(), sourcePiece);
         startRank.movePiece(startPos.getXPos(), Piece.createBlank());
 
     }
 
-    private void verifyPositionByPiece(Position startPos, Position endPos, Piece sourcePiece, Piece targetPiece) {
+    private void verifyPositionByPiece(Position startPos, Position endPos, Piece sourcePiece, List<Rank> chessBoard) {
         int startX = startPos.getXPos();
         int startY= startPos.getYPos();
         int endX = endPos.getXPos();
         int endY = endPos.getYPos();
 
-        sourcePiece.verifyMovePosition(startPos, endPos, sourcePiece, targetPiece);
+        sourcePiece.verifyMovePosition(startPos, endPos, sourcePiece, chessBoard);
 
         // 폰인 경우 대각선 이동은 적을 잡을 때만 가능
         if (sourcePiece.getName().equals(Type.PAWN) && Math.abs(endX - startX) == 1 && Math.abs(endY - startY) == 1){
-            canCapture(sourcePiece, targetPiece);
+            canCapture(sourcePiece, chessBoard, endPos);
         }
     }
     // 대각선에 적이 있는지 체크
-    private void canCapture(Piece sourcePiece, Piece targetPiece) {
+    private void canCapture(Piece sourcePiece, List<Rank> chessBoard, Position endPos) {
+        Rank endRank = chessBoard.get(MAX_BOARD - endPos.getYPos());
+        Piece targetPiece = endRank.getPieceByPosition(endPos.getXPos());
         // 대각선으로 적을 잡을 수 있는지 확인
         if (targetPiece.getName().equals(Type.NO_PIECE) || targetPiece.getColor().equals(sourcePiece.getColor())) {
             throw new IllegalArgumentException("대각선으로 적을 잡을 수 없습니다.");
