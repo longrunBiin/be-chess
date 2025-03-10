@@ -22,15 +22,14 @@ public class Rook extends Piece{
         Direction moveDirection = findDirection(dx, dy);
         checkPieceCanMove(moveDirection, sourcePiece);
 
-        Position next = new Position(startPos.getXPos() + moveDirection.getXDegree(),
-                startPos.getYPos() + moveDirection.getYDegree());
+        Position next = getNextPosition(startPos, moveDirection);
+        Piece targetPiece = getTargetPiece(chessBoard, next);
 
-        Rank endRank = chessBoard.get(MAX_BOARD - next.getYPos());
-        Piece targetPiece = endRank.getPieceByPosition(next.getXPos());
-        verifyPieceAlreadyOnBoard(sourcePiece, targetPiece);
+        verifyNextPosition(next, endPos, sourcePiece, targetPiece);
 
         verifyMovePosition(next, endPos, sourcePiece, chessBoard);
     }
+
     @Override
     protected Direction findDirection(int dx, int dy) {
         if (dx == 0 && dy == 0) return null; // 자기 위치 유지

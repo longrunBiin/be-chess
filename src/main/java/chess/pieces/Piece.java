@@ -1,5 +1,7 @@
 package chess.pieces;
 
+import static chess.Board.MAX_BOARD;
+
 import chess.Direction;
 import chess.Position;
 import chess.Rank;
@@ -146,10 +148,29 @@ abstract public class Piece {
         }
     }
 
-    protected void verifyEnemyAlreadyOnBoard(Piece targetPiece) {
+    private void verifyEnemyAlreadyOnBoard(Piece targetPiece) {
         if(!targetPiece.getName().equals(Type.NO_PIECE)){
             throw new IllegalArgumentException("이동경로에 적이 있어 이동할 수 없습니다.");
         }
+    }
+
+    protected Position verifyNextPosition(Position next, Position endPos, Piece sourcePiece, Piece targetPiece) {
+        verifyPieceAlreadyOnBoard(sourcePiece, targetPiece);
+        if(!endPos.equals(next))
+            verifyEnemyAlreadyOnBoard(targetPiece);
+        return next;
+    }
+
+    protected Position getNextPosition(Position startPos, Direction moveDirection) {
+        Position next = new Position(startPos.getXPos() + moveDirection.getXDegree(),
+                startPos.getYPos() + moveDirection.getYDegree());
+        return next;
+    }
+
+    protected Piece getTargetPiece(List<Rank> chessBoard, Position next) {
+        Rank endRank = chessBoard.get(MAX_BOARD - next.getYPos());
+        Piece targetPiece = endRank.getPieceByPosition(next.getXPos());
+        return targetPiece;
     }
 
     @Override

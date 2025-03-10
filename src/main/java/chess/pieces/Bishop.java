@@ -22,12 +22,10 @@ public class Bishop extends Piece{
         Direction moveDirection = findDirection(dx, dy);
         checkPieceCanMove(moveDirection, sourcePiece);
 
-        Position next = new Position(startPos.getXPos() + moveDirection.getXDegree(),
-                startPos.getYPos() + moveDirection.getYDegree());
+        Position next = getNextPosition(startPos, moveDirection);
+        Piece targetPiece = getTargetPiece(chessBoard, next);
 
-        Rank endRank = chessBoard.get(MAX_BOARD - next.getYPos());
-        Piece targetPiece = endRank.getPieceByPosition(next.getXPos());
-        verifyPieceAlreadyOnBoard(sourcePiece, targetPiece);
+        verifyNextPosition(next, endPos, sourcePiece, targetPiece);
 
         verifyMovePosition(next, endPos, sourcePiece, chessBoard);
     }
