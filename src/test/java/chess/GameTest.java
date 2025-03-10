@@ -82,6 +82,17 @@ public class GameTest extends TestUtil{
         assertThrows(IllegalArgumentException.class, () ->chessGame.move(sourcePosition, targetPosition));
     }
 
+    @Test
+    @DisplayName("상대 턴에는 말을 움직일 수 없다.")
+    void checkMyTurn() {
+        board.initialize();
+
+        String sourcePosition = "a7";
+        String targetPosition = "a5";
+
+        assertThrows(IllegalArgumentException.class, () ->chessGame.move(sourcePosition, targetPosition));
+    }
+
     private void initializeBoardByString() {
         String boardText = ".♚♜.....\n"
                 + "♟.♟♝....\n"
