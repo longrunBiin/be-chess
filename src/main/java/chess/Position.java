@@ -10,6 +10,11 @@ public class Position {
         verifyBoardPosition(xPos, yPos);
     }
 
+    public Position(int xPos, int yPos) {
+        this.xPos = xPos;
+        this.yPos = yPos;
+    }
+
     private void verifyBoardPosition(int xPos, int yPos) {
         if (xPos < 0 || xPos > Board.MAX_BOARD - 1 || yPos <= 0 || yPos > Board.MAX_BOARD)
             throw new IllegalArgumentException("이동 위치가 체스판을 벗어납니다");
