@@ -16,7 +16,7 @@ public class Rook extends Piece{
         if (dx == 0 && dy == 0) return;
 
         Direction moveDirection = findDirection(dx, dy);
-        checkPieceCanMove(moveDirection);
+        checkPieceCanMove(moveDirection, sourcePiece);
 
         verifyPieceAlreadyOnBoard(sourcePiece, targetPiece);
         Position next = new Position(startPos.getXPos() + moveDirection.getXDegree(),

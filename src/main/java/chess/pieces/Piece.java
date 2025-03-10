@@ -133,9 +133,9 @@ abstract public class Piece {
                 .orElse(null);
     }
 
-    protected void checkPieceCanMove(Direction moveDirection) {
+    protected void checkPieceCanMove(Direction moveDirection, Piece piece) {
         if (moveDirection == null || !directionList.contains(moveDirection)) {
-            throw new IllegalArgumentException("기물의 이동 규칙을 위반했습니다.");
+            throw new IllegalArgumentException(piece + "의 이동 규칙을 위반했습니다.");
         }
     }
 

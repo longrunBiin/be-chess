@@ -15,7 +15,7 @@ public class Knight extends Piece{
 
 
         Direction moveDirection = findDirection(dx, dy);
-        checkPieceCanMove(moveDirection);
+        checkPieceCanMove(moveDirection, sourcePiece);
         verifyPieceAlreadyOnBoard(sourcePiece, targetPiece);
     }
     @Override

@@ -21,7 +21,7 @@ public class Pawn extends Piece{
         int dy = endPos.getYPos() - startPos.getYPos();
 
         Direction moveDirection = findDirection(dx, dy);
-        checkPieceCanMove(moveDirection);
+        checkPieceCanMove(moveDirection, sourcePiece);
         verifyPieceAlreadyOnBoard(sourcePiece, targetPiece);
 
         if (!hasMoved) {

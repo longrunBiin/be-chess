@@ -16,7 +16,7 @@ public class Queen extends Piece{
         if (dx == 0 && dy == 0) return;
         //직선으로만 움직이거나 1씩 증가하는 대가선으로만 움직이는 경우
         Direction moveDirection = findDirection(dx, dy);
-        checkPieceCanMove(moveDirection);
+        checkPieceCanMove(moveDirection, sourcePiece);
 
         verifyPieceAlreadyOnBoard(sourcePiece, targetPiece);
         Position next = new Position(startPos.getXPos() + moveDirection.getXDegree(),
