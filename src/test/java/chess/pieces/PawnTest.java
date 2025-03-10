@@ -96,4 +96,19 @@ public class PawnTest extends TestUtil {
 
         System.out.println(chessView.showBoard());
     }
+
+    @Test
+    @DisplayName("정면에 있는 적을 잡을 수 없다.")
+    void pawnCaptureFrontalEnemyFail() {
+        initEmptyBoardTest();
+        addPiece("g4", Piece.createBlack(Type.PAWN));
+
+        String sourcePosition = "g4";
+        String targetPosition = "g3";
+
+        assertThrows(IllegalArgumentException.class, () ->chessGame.move(sourcePosition, targetPosition));
+        assertThat(chessGame.findPiece(sourcePosition)).isEqualTo(Piece.createBlack(Type.PAWN));
+
+        System.out.println(chessView.showBoard());
+    }
 }
