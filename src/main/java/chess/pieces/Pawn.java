@@ -26,12 +26,21 @@ public class Pawn extends Piece{
         Direction moveDirection = findDirection(dx, dy);
         checkPieceCanMove(moveDirection, sourcePiece);
 
-        Position next = new Position(startPos.getXPos() + moveDirection.getXDegree(),
-                startPos.getYPos() + moveDirection.getYDegree());
+        Position nextPosition = getNextPosition(startPos, moveDirection);
+        Piece targetPiece = getTargetPiece(chessBoard, nextPosition);
 
-        Rank endRank = chessBoard.get(MAX_BOARD - next.getYPos());
-        Piece targetPiece = endRank.getPieceByPosition(next.getXPos());
-        verifyPieceAlreadyOnBoard(sourcePiece, targetPiece);
+        // 정면 이동일 경우, 목표 위치에 적이 있으면 이동 불가
+        if (dx == 0 && targetPiece != null && targetPiece.getColor() != Color.NOCOLOR) {
+            throw new IllegalArgumentException("폰은 정면에 있는 적을 잡을 수 없습니다.");
+        }
+
+        // 대각선 이동일 경우, 목표 위치에 적이 반드시 있어야 함
+        if (Math.abs(dx) == 1 && Math.abs(dy) == 1) {
+            if (targetPiece == null || targetPiece.getColor() == Color.NOCOLOR) {
+                throw new IllegalArgumentException("폰은 대각선으로만 적을 잡을 수 있습니다.");
+            }
+        }
+        verifyNextPosition(nextPosition, endPos, sourcePiece, targetPiece);
 
         if (!hasMoved) {
             if (Math.abs(dy) == 2 && dx == 0) {
