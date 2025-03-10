@@ -1,6 +1,7 @@
 package chess.pieces;
 
 import chess.Direction;
+import chess.Position;
 import java.util.List;
 import java.util.Objects;
 
@@ -114,7 +115,7 @@ abstract public class Piece {
         return color.equals(Color.BLACK);
     }
 
-    abstract public void verifyMovePosition(int startX, int startY, int endX, int endY);
+    abstract public void verifyMovePosition(Position startPos, Position endPos, Piece sourcePiece, Piece targetPiece);
 
     abstract protected Direction findDirection(int dx, int dy);
 
@@ -135,6 +136,12 @@ abstract public class Piece {
     protected void checkPieceCanMove(Direction moveDirection) {
         if (moveDirection == null || !directionList.contains(moveDirection)) {
             throw new IllegalArgumentException("기물의 이동 규칙을 위반했습니다.");
+        }
+    }
+
+    protected void verifyPieceAlreadyOnBoard(Piece sourcePiece, Piece targetPiece) {
+        if(targetPiece.getColor().equals(sourcePiece.getColor())){
+            throw new IllegalArgumentException("같은 편이 있으면 이동할 수 없습니다.");
         }
     }
 
