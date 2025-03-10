@@ -33,16 +33,18 @@ public class ChessGame {
         //기물을 옮긴 후 시작 위치를 공백으로 설정
         endRank.movePiece(endPos.getXPos(), sourcePiece);
         startRank.movePiece(startPos.getXPos(), Piece.createBlank());
-
+        endTurn();
     }
 
     private void checkTurn(Piece sourcePiece) {
-        if ((whiteTurn && sourcePiece.isWhite()) || (blackTurn && sourcePiece.isBlack())){
-            whiteTurn = !whiteTurn;
-            blackTurn = !blackTurn;
-            return;
+        if ((whiteTurn && sourcePiece.isBlack()) || (blackTurn && sourcePiece.isWhite())){
+            throw new IllegalArgumentException("상대의 턴입니다.");
         }
-        throw new IllegalArgumentException("상대의 턴입니다.");
+    }
+
+    private void endTurn() {
+        whiteTurn = !whiteTurn;
+        blackTurn = !blackTurn;
     }
 
     private void verifyPositionByPiece(Position startPos, Position endPos, Piece sourcePiece, List<Rank> chessBoard) {
