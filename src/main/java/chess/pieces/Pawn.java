@@ -29,6 +29,18 @@ public class Pawn extends Piece{
         Position nextPosition = getNextPosition(startPos, moveDirection);
         Piece targetPiece = getTargetPiece(chessBoard, nextPosition);
 
+        verifyPawnMeetEnemy(dx, targetPiece, dy);
+        verifyNextPosition(nextPosition, endPos, sourcePiece, targetPiece);
+
+        if (!hasMoved) {
+            if (Math.abs(dy) == 2 && dx == 0) {
+                // 2칸 전진 이동 (첫 번째만 가능)
+                hasMoved = true;
+            }
+        }
+    }
+
+    private void verifyPawnMeetEnemy(int dx, Piece targetPiece, int dy) {
         // 정면 이동일 경우, 목표 위치에 적이 있으면 이동 불가
         if (dx == 0 && targetPiece != null && targetPiece.getColor() != Color.NOCOLOR) {
             throw new IllegalArgumentException("폰은 정면에 있는 적을 잡을 수 없습니다.");
@@ -40,15 +52,8 @@ public class Pawn extends Piece{
                 throw new IllegalArgumentException("폰은 대각선으로만 적을 잡을 수 있습니다.");
             }
         }
-        verifyNextPosition(nextPosition, endPos, sourcePiece, targetPiece);
-
-        if (!hasMoved) {
-            if (Math.abs(dy) == 2 && dx == 0) {
-                // 2칸 전진 이동 (첫 번째만 가능)
-                hasMoved = true;
-            }
-        }
     }
+
     @Override
     protected Direction findDirection(int dx, int dy) {
         if (dx == 0 && dy == 0) return null; // 자기 위치 유지
