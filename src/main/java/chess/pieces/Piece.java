@@ -136,7 +136,7 @@ abstract public class Piece {
 
     protected void checkPieceCanMove(Direction moveDirection, Piece piece) {
         if (moveDirection == null || !directionList.contains(moveDirection)) {
-            throw new IllegalArgumentException(piece + "의 이동 규칙을 위반했습니다.");
+            throw new IllegalArgumentException(piece.getName() + "의 이동 규칙을 위반했습니다.");
         }
     }
 
