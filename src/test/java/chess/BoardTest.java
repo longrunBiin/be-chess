@@ -9,44 +9,38 @@ import chess.pieces.Piece.Color;
 import chess.pieces.Piece.Type;
 import java.util.ArrayList;
 import java.util.List;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-class BoardTest {
-    private Board board;
+class BoardTest extends TestUtil{
 
-    @BeforeEach
-    void init() {
-        board = new Board();
-    }
     @Test
     @DisplayName("보드가 초기화 되면 모든 말들이 생성되어야 한다.")
     void create() {
         board.initialize();
-        assertThat(board.pieceCount()).isEqualTo(32);
+        assertThat(chessGame.pieceCount()).isEqualTo(32);
         String blankRank = appendNewLine("........");
         assertThat(appendNewLine("♜♞♝♛♚♝♞♜") +
                 appendNewLine("♟♟♟♟♟♟♟♟") +
                 blankRank + blankRank + blankRank + blankRank +
                 appendNewLine("♙♙♙♙♙♙♙♙") +
-                appendNewLine("♖♘♗♕♔♗♘♖")).isEqualTo(board.showBoard());
+                appendNewLine("♖♘♗♕♔♗♘♖")).isEqualTo(chessView.showBoard());
     }
 
     @Test
     @DisplayName("보드초기화시 같은 색의 폰들이 한줄에 있어야한다.")
     void initialize() {
         board.initialize();
-        assertThat(board.getPawnResult(Color.WHITE)).isEqualTo("♙♙♙♙♙♙♙♙");
-        assertThat(board.getPawnResult(Color.BLACK)).isEqualTo("♟♟♟♟♟♟♟♟");
+        assertThat(chessView.getPawnResult(Color.WHITE)).isEqualTo("♙♙♙♙♙♙♙♙");
+        assertThat(chessView.getPawnResult(Color.BLACK)).isEqualTo("♟♟♟♟♟♟♟♟");
     }
 
     @Test
     @DisplayName("색과 종류에 따른 보드 위에 존재하는 기물 갯수를 리턴한다.")
     void pieceCountOnBoard() {
         initializeBoardByString();
-        int pawnCount = board.pieceCountOnBoard(Color.BLACK, Type.PAWN);
-        int knightCount = board.pieceCountOnBoard(Color.WHITE, Type.KNIGHT);
+        int pawnCount = chessGame.pieceCountOnBoard(Color.BLACK, Type.PAWN);
+        int knightCount = chessGame.pieceCountOnBoard(Color.WHITE, Type.KNIGHT);
 
         assertThat(pawnCount).isEqualTo(3);
         assertThat(knightCount).isEqualTo(1);
@@ -57,73 +51,46 @@ class BoardTest {
     void findPiece() {
         board.initialize();
 
-        assertThat(board.findPiece("a8").getName()).isEqualTo(Type.ROOK);
-        assertThat(board.findPiece("a8").getColor()).isEqualTo(Color.BLACK);
-        assertThat(board.findPiece("h8").getName()).isEqualTo(Type.ROOK);
-        assertThat(board.findPiece("h8").getColor()).isEqualTo(Color.BLACK);
-        assertThat(board.findPiece("a1").getName()).isEqualTo(Type.ROOK);
-        assertThat(board.findPiece("a1").getColor()).isEqualTo(Color.WHITE);
-        assertThat(board.findPiece("h1").getName()).isEqualTo(Type.ROOK);
-        assertThat(board.findPiece("h1").getColor()).isEqualTo(Color.WHITE);
+        assertThat(chessGame.findPiece("a8")).isEqualTo(Piece.createBlack(Type.ROOK));
+        assertThat(chessGame.findPiece("h8")).isEqualTo(Piece.createBlack(Type.ROOK));
+        assertThat(chessGame.findPiece("a1")).isEqualTo(Piece.createWhite(Type.ROOK));
+        assertThat(chessGame.findPiece("h1")).isEqualTo(Piece.createWhite(Type.ROOK));
     }
 
     @Test
-    @DisplayName("임의의 위치에 기물이 추가 되어야한다.")
+    @DisplayName("시작 위치에 있는 기물이 목표 위치로 이동되어야한다..")
     void move(){
-        board.initializeEmpty();
+        board.initialize();
 
-        String position = "b5";
-        Piece piece = Piece.createBlack(Type.ROOK);
-        board.move(position, piece);
+        String sourcePosition = "b2";
+        String targetPosition = "b3";
+        chessGame.move(sourcePosition, targetPosition);
 
-        assertThat(board.findPiece(position)).isEqualTo(piece);
-        System.out.println(board.showBoard());
+        assertThat(chessGame.findPiece(sourcePosition)).isEqualTo(Piece.createBlank());
+        assertThat(chessGame.findPiece(targetPosition)).isEqualTo(Piece.createWhite(Type.PAWN));
+        System.out.println(chessView.showBoard());
     }
     @Test
     @DisplayName("보드 위에 있는 기물들의 점수를 구한다.")
     void calculatePoint() {
-        board.initializeEmpty();
+        initEmptyBoardTest();
 
-        addPiece("b6", Piece.createBlack(Type.PAWN));
-        addPiece("e6", Piece.createBlack(Type.QUEEN));
-        addPiece("b8", Piece.createBlack(Type.KING));
-        addPiece("c8", Piece.createBlack(Type.ROOK));
+        assertThat(chessGame.calculatePoint(Color.BLACK)).isCloseTo(20.5, within(0.01));
+        assertThat(chessGame.calculatePoint(Color.WHITE)).isCloseTo(8.5, within(0.01));
 
-        addPiece("g2", Piece.createWhite(Type.PAWN));
-        addPiece("g3", Piece.createWhite(Type.PAWN));
-        addPiece("e1", Piece.createWhite(Type.ROOK));
-        addPiece("f1", Piece.createWhite(Type.KING));
-
-        assertThat(board.calculatePoint(Color.BLACK)).isCloseTo(15.0, within(0.01));
-        assertThat(board.calculatePoint(Color.WHITE)).isCloseTo(6.0, within(0.01));
-
-        System.out.println(board.showBoard());
+        System.out.println(chessView.showBoard());
     }
 
     @Test
     @DisplayName("보드 위에 남아있는 기물들을 점수 순으로 내림차순한다.")
     void sortPieces() {
-        board.initializeEmpty();
+        initEmptyBoardTest();
 
-        addPiece("b6", Piece.createBlack(Type.PAWN));
-        addPiece("e6", Piece.createBlack(Type.QUEEN));
-        addPiece("b8", Piece.createBlack(Type.KING));
-        addPiece("c8", Piece.createBlack(Type.ROOK));
+        List<Piece> sortedBlack = chessGame.sortPiece(Color.BLACK);
+        List<Piece> sortedWhite = chessGame.sortPiece(Color.WHITE);
 
-        addPiece("g2", Piece.createWhite(Type.PAWN));
-        addPiece("g3", Piece.createWhite(Type.PAWN));
-        addPiece("e1", Piece.createWhite(Type.ROOK));
-        addPiece("f1", Piece.createWhite(Type.KING));
-
-        List<Piece> sortedBlack = board.sortPiece(Color.BLACK);
-        List<Piece> sortedWhite = board.sortPiece(Color.WHITE);
-
-        assertThat(sortedBlack).extracting(Piece::getName).containsExactly(Type.QUEEN, Type.ROOK, Type.PAWN, Type.KING);
-        assertThat(sortedWhite).extracting(Piece::getName).containsExactly(Type.ROOK, Type.PAWN, Type.PAWN, Type.KING);
-    }
-
-    private void addPiece(String position, Piece piece) {
-        board.move(position, piece);
+        assertThat(sortedBlack).extracting(Piece::getName).containsExactly(Type.QUEEN, Type.ROOK, Type.BISHOP, Type.KNIGHT, Type.PAWN, Type.KING);
+        assertThat(sortedWhite).extracting(Piece::getName).containsExactly(Type.ROOK, Type.KNIGHT, Type.PAWN, Type.PAWN, Type.KING);
     }
 
     private void initializeBoardByString() {
@@ -143,7 +110,7 @@ class BoardTest {
                 Piece piece = Piece.createPieceByRepresentation(s.charAt(i));
                 rank.add(piece);
             }
-            board.addPiece(new Rank(rank));
+            board.addRank(new Rank(rank));
         }
     }
 

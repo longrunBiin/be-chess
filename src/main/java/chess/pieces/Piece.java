@@ -1,6 +1,10 @@
 package chess.pieces;
 
-public class Piece {
+import chess.Direction;
+import java.util.List;
+import java.util.Objects;
+
+abstract public class Piece {
     public enum Color {
         WHITE, BLACK, NOCOLOR;
     }
@@ -44,24 +48,42 @@ public class Piece {
 
     private Type name;
     private Color color;
+    protected List<Direction> directionList;
 
-    private Piece(Type name, Color color) {
+    Piece(Type name, Color color, List<Direction> directionList) {
         this.name = name;
         this.color = color;
+        this.directionList = directionList;
     }
 
     private Piece() {
     }
 
     public static Piece createBlank() {
-        return new Piece(Type.NO_PIECE, Color.NOCOLOR);
+        return new Blank();
     }
 
     public static Piece createWhite(Type type) {
-        return new Piece(type, Color.WHITE);
+        return switch (type) {
+            case KING -> new King(type, Color.WHITE);
+            case QUEEN -> new Queen(type, Color.WHITE);
+            case ROOK -> new Rook(type, Color.WHITE);
+            case BISHOP -> new Bishop(type, Color.WHITE);
+            case KNIGHT -> new Knight(type, Color.WHITE);
+            case PAWN -> new Pawn(type, Color.WHITE);
+            default -> new Blank();
+        };
     }
     public static Piece createBlack(Type type) {
-        return new Piece(type, Color.BLACK);
+        return switch (type) {
+            case KING -> new King(type, Color.BLACK);
+            case QUEEN -> new Queen(type, Color.BLACK);
+            case ROOK -> new Rook(type, Color.BLACK);
+            case BISHOP -> new Bishop(type, Color.BLACK);
+            case KNIGHT -> new Knight(type, Color.BLACK);
+            case PAWN -> new Pawn(type, Color.BLACK);
+            default -> new Blank();
+        };
     }
     public static Piece createPieceByRepresentation(char representation) {
         for (Type value : Type.values()) {
@@ -90,5 +112,42 @@ public class Piece {
     }
     public boolean isBlack() {
         return color.equals(Color.BLACK);
+    }
+
+    abstract public void verifyMovePosition(int startX, int startY, int endX, int endY);
+
+    abstract protected Direction findDirection(int dx, int dy);
+
+    protected Direction getDirectionByCurrent(int dx, int dy) {
+        return Direction.everyDirection().stream()
+                .filter(d -> (d.getXDegree() == Integer.signum(dx) && d.getYDegree() == Integer.signum(dy)))
+                .findFirst()
+                .orElse(null);
+    }
+
+    protected Direction getDirectionByCurrentExactly(int dx, int dy) {
+        return directionList.stream()
+                .filter(d -> (d.getXDegree() == dx && d.getYDegree() == dy))
+                .findFirst()
+                .orElse(null);
+    }
+
+    protected void checkPieceCanMove(Direction moveDirection) {
+        if (moveDirection == null || !directionList.contains(moveDirection)) {
+            throw new IllegalArgumentException("기물의 이동 규칙을 위반했습니다.");
+        }
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Piece piece = (Piece) obj;
+        return color == piece.color && name == piece.name;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(color, name);
     }
 }
