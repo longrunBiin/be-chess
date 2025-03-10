@@ -53,21 +53,8 @@ public class ChessGame {
         int endY = endPos.getYPos();
 
         sourcePiece.verifyMovePosition(startPos, endPos, sourcePiece, chessBoard);
+    }
 
-        // 폰인 경우 대각선 이동은 적을 잡을 때만 가능
-        if (sourcePiece.getName().equals(Type.PAWN) && Math.abs(endX - startX) == 1 && Math.abs(endY - startY) == 1){
-            canCapture(sourcePiece, chessBoard, endPos);
-        }
-    }
-    // 대각선에 적이 있는지 체크
-    private void canCapture(Piece sourcePiece, List<Rank> chessBoard, Position endPos) {
-        Rank endRank = chessBoard.get(MAX_BOARD - endPos.getYPos());
-        Piece targetPiece = endRank.getPieceByPosition(endPos.getXPos());
-        // 대각선으로 적을 잡을 수 있는지 확인
-        if (targetPiece.getName().equals(Type.NO_PIECE) || targetPiece.getColor().equals(sourcePiece.getColor())) {
-            throw new IllegalArgumentException("대각선으로 적을 잡을 수 없습니다.");
-        }
-    }
     public double calculatePoint(Color color) {
         double sum = chessBoard.stream()
                 .mapToDouble(rank -> rank.getPointByColor(color))
