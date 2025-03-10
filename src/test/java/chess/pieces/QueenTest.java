@@ -24,6 +24,7 @@ public class QueenTest extends TestUtil {
         assertThat(chessGame.findPiece(targetPosition)).isEqualTo(Piece.createBlack(Type.QUEEN));
 
         System.out.println(chessView.showBoard());
+        chessGame.endTurn();
 
         sourcePosition = "e1";
         targetPosition = "b4";

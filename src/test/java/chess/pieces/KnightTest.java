@@ -22,6 +22,7 @@ public class KnightTest extends TestUtil {
 
         assertThat(chessGame.findPiece(sourcePosition)).isEqualTo(Piece.createBlank());
         assertThat(chessGame.findPiece(targetPosition)).isEqualTo(Piece.createBlack(Type.KNIGHT));
+        chessGame.endTurn();
 
         sourcePosition = "c3";
         targetPosition = "d1";
