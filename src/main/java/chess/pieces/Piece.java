@@ -144,6 +144,9 @@ abstract public class Piece {
         if(targetPiece.getColor().equals(sourcePiece.getColor())){
             throw new IllegalArgumentException("같은 편이 있으면 이동할 수 없습니다.");
         }
+    }
+
+    protected void verifyEnemyAlreadyOnBoard(Piece targetPiece) {
         if(!targetPiece.getName().equals(Type.NO_PIECE)){
             throw new IllegalArgumentException("이동경로에 적이 있어 이동할 수 없습니다.");
         }
