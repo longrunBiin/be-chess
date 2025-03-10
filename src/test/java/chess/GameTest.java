@@ -71,6 +71,16 @@ public class GameTest extends TestUtil{
         assertThat(sortedWhite).extracting(Piece::getName).containsExactly(Type.ROOK, Type.KNIGHT, Type.PAWN, Type.PAWN, Type.KING);
     }
 
+    @Test
+    @DisplayName("기물 이동경로 상에 같은 팀 기물이 있는 경우 에러를 발생시킨다.")
+    void movePieceToCrash() {
+        board.initialize();
+
+        String sourcePosition = "a1";
+        String targetPosition = "a3";
+
+        assertThrows(IllegalArgumentException.class, () ->chessGame.move(sourcePosition, targetPosition));
+    }
 
     private void initializeBoardByString() {
         String boardText = ".♚♜.....\n"
