@@ -46,21 +46,8 @@ public class Pawn extends Piece{
             if (Math.abs(dy) == 2 && dx == 0) {
                 // 2칸 전진 이동 (첫 번째만 가능)
                 hasMoved = true;
-                return;
             }
         }
-
-        // 이후 이동은 한 칸씩만 가능
-        if (Math.abs(dy) == 1 && dx == 0) {
-            return;
-        }
-
-        // 대각선 이동은 적을 잡을 때만 가능
-        if (Math.abs(dx) == 1 && Math.abs(dy) == 1) {
-            return;
-        }
-
-        throw new IllegalArgumentException("폰의 이동 규칙을 위반했습니다.");
     }
     @Override
     protected Direction findDirection(int dx, int dy) {
