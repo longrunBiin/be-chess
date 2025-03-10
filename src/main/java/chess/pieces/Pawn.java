@@ -1,6 +1,7 @@
 package chess.pieces;
 
 import chess.Direction;
+import chess.Position;
 import java.util.List;
 
 public class Pawn extends Piece{
@@ -15,12 +16,13 @@ public class Pawn extends Piece{
         return Direction.blackPawnDirection();
     }
     @Override
-    public void verifyMovePosition(int startX, int startY, int endX, int endY) {
-        int dx = endX - startX;
-        int dy = endY - startY;
+    public void verifyMovePosition(Position startPos, Position endPos, Piece sourcePiece, Piece targetPiece) {
+        int dx = endPos.getXPos() - startPos.getXPos();
+        int dy = endPos.getYPos() - startPos.getYPos();
 
         Direction moveDirection = findDirection(dx, dy);
         checkPieceCanMove(moveDirection);
+        verifyPieceAlreadyOnBoard(sourcePiece, targetPiece);
 
         if (!hasMoved) {
             if (Math.abs(dy) == 2 && dx == 0) {

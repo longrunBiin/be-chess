@@ -2,6 +2,7 @@ package chess.pieces;
 
 
 import chess.Direction;
+import chess.Position;
 
 public class Blank extends Piece{
     public Blank() {
@@ -9,9 +10,7 @@ public class Blank extends Piece{
     }
 
     @Override
-    public void verifyMovePosition(int startX, int startY, int endX, int endY) {
-
-    }
+    public void verifyMovePosition(Position startPos, Position endPos, Piece sourcePiece, Piece targetPiece) {}
 
     @Override
     protected Direction findDirection(int dx, int dy) {

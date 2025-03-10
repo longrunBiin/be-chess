@@ -1,6 +1,7 @@
 package chess.pieces;
 
 import chess.Direction;
+import chess.Position;
 
 public class Rook extends Piece{
     public Rook(Type type, Color color) {
@@ -8,16 +9,19 @@ public class Rook extends Piece{
     }
 
     @Override
-    public void verifyMovePosition(int startX, int startY, int endX, int endY) {
-        int dx = endX - startX;
-        int dy = endY - startY;
+    public void verifyMovePosition(Position startPos, Position endPos, Piece sourcePiece, Piece targetPiece) {
+        int dx = endPos.getXPos() - startPos.getXPos();
+        int dy = endPos.getYPos() - startPos.getYPos();
 
-        if (startX == endX && startY == endY) return;
+        if (dx == 0 && dy == 0) return;
 
         Direction moveDirection = findDirection(dx, dy);
         checkPieceCanMove(moveDirection);
 
-        verifyMovePosition(startX + moveDirection.getXDegree(), startY + moveDirection.getYDegree(), endX, endY);
+        verifyPieceAlreadyOnBoard(sourcePiece, targetPiece);
+        Position next = new Position(startPos.getXPos() + moveDirection.getXDegree(),
+                startPos.getYPos() + moveDirection.getYDegree());
+        verifyMovePosition(next, endPos, sourcePiece, targetPiece);
     }
     @Override
     protected Direction findDirection(int dx, int dy) {

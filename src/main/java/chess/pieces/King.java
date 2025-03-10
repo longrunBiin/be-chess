@@ -1,6 +1,7 @@
 package chess.pieces;
 
 import chess.Direction;
+import chess.Position;
 
 public class King extends Piece{
 
@@ -9,12 +10,14 @@ public class King extends Piece{
     }
 
     @Override
-    public void verifyMovePosition(int startX, int startY, int endX, int endY) {
-        int dx = endX - startX;
-        int dy = endY - startY;
+    public void verifyMovePosition(Position startPos, Position endPos, Piece sourcePiece, Piece targetPiece) {
+        int dx = endPos.getXPos() - startPos.getXPos();
+        int dy = endPos.getYPos() - startPos.getYPos();
 
         Direction moveDirection = findDirection(dx, dy);
         checkPieceCanMove(moveDirection);
+
+        verifyPieceAlreadyOnBoard(sourcePiece, targetPiece);
     }
     @Override
     protected Direction findDirection(int dx, int dy) {
