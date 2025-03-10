@@ -12,6 +12,8 @@ import java.util.stream.Collectors;
 
 public class ChessGame {
     private final List<Rank> chessBoard;
+    boolean whiteTurn = true;
+    boolean blackTurn = false;
 
     public ChessGame(List<Rank> chessBoard) {
         this.chessBoard = chessBoard;
@@ -25,12 +27,22 @@ public class ChessGame {
         Rank endRank = chessBoard.get(MAX_BOARD - endPos.getYPos());
         //시작위치에 있는 기물 가져오기
         Piece sourcePiece = startRank.getPieceByPosition(startPos.getXPos());
+        checkTurn(sourcePiece);
 
         verifyPositionByPiece(startPos, endPos, sourcePiece, chessBoard);
         //기물을 옮긴 후 시작 위치를 공백으로 설정
         endRank.movePiece(endPos.getXPos(), sourcePiece);
         startRank.movePiece(startPos.getXPos(), Piece.createBlank());
 
+    }
+
+    private void checkTurn(Piece sourcePiece) {
+        if ((whiteTurn && sourcePiece.isWhite()) || (blackTurn && sourcePiece.isBlack())){
+            whiteTurn = !whiteTurn;
+            blackTurn = !blackTurn;
+            return;
+        }
+        throw new IllegalArgumentException("상대의 턴입니다.");
     }
 
     private void verifyPositionByPiece(Position startPos, Position endPos, Piece sourcePiece, List<Rank> chessBoard) {
