@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Application {
+
+
     public static void main(String[] args) {
         Scanner in = new Scanner(System.in);
         List<Rank> chessBoard = new ArrayList<>();
@@ -14,8 +16,17 @@ public class Application {
 
         System.out.println("게임을 시작하려면 start, 끝내려면 end를 입력하세요");
         while (true) {
+            if (!readUserCommand(in, board, chessView, chessGame)) {
+                return;
+            }
+        }
+    }
+
+    private static boolean readUserCommand(Scanner in, Board board, ChessView chessView, ChessGame chessGame) {
+        try{
             String input = in.nextLine();
-            if (input.equals("end")) return;
+            if (input.equals("end"))
+                return false;
             else if(input.equals("start")){
                 board.initialize();
                 chessView.print();
@@ -25,6 +36,9 @@ public class Application {
                 chessView.print();
             }
             System.out.println("기물을 움직이려면 move start end 를 입력하세요");
+        }catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage() + "다시 입력하세요.");
         }
+        return true;
     }
 }

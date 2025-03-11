@@ -1,6 +1,11 @@
 package chess.pieces;
 
+import static chess.Board.MAX_BOARD;
+
 import chess.Direction;
+import chess.Position;
+import chess.Rank;
+import java.util.List;
 
 public class Knight extends Piece{
     public Knight(Type type, Color color) {
@@ -8,12 +13,18 @@ public class Knight extends Piece{
     }
 
     @Override
-    public void verifyMovePosition(int startX, int startY, int endX, int endY) {
-        int dx = endX - startX;
-        int dy = endY - startY;
+    public void verifyMovePosition(Position startPos, Position endPos, Piece sourcePiece, List<Rank> chessBoard) {
+        int dx = endPos.getXPos() - startPos.getXPos();
+        int dy = endPos.getYPos() - startPos.getYPos();
+
 
         Direction moveDirection = findDirection(dx, dy);
-        checkPieceCanMove(moveDirection);
+        checkPieceCanMove(moveDirection, sourcePiece);
+
+        Position next = getNextPosition(startPos, moveDirection);
+        Piece targetPiece = getTargetPiece(chessBoard, next);
+
+        verifyNextPosition(next, endPos, sourcePiece, targetPiece);
     }
     @Override
     protected Direction findDirection(int dx, int dy) {

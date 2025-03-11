@@ -1,25 +1,34 @@
 package chess.pieces;
 
+import static chess.Board.MAX_BOARD;
+
 import chess.Direction;
+import chess.Position;
+import chess.Rank;
+import java.util.List;
+
 public class Queen extends Piece{
     public Queen(Type type, Color color) {
         super(type, color, Direction.everyDirection());
     }
 
     @Override
-    public void verifyMovePosition(int startX, int startY, int endX, int endY) {
-        int dx = endX - startX;
-        int dy = endY - startY;
+    public void verifyMovePosition(Position startPos, Position endPos, Piece sourcePiece, List<Rank> chessBoard) {
+        int dx = endPos.getXPos() - startPos.getXPos();
+        int dy = endPos.getYPos() - startPos.getYPos();
 
-        if (startX == endX && startY == endY) return;
+        if (dx == 0 && dy == 0) return;
         //직선으로만 움직이거나 1씩 증가하는 대가선으로만 움직이는 경우
         Direction moveDirection = findDirection(dx, dy);
-        checkPieceCanMove(moveDirection);
+        checkPieceCanMove(moveDirection, sourcePiece);
 
-        verifyMovePosition(startX + moveDirection.getXDegree(), startY + moveDirection.getYDegree(), endX, endY);
+        Position next = getNextPosition(startPos, moveDirection);
+        Piece targetPiece = getTargetPiece(chessBoard, next);
+
+        verifyNextPosition(next, endPos, sourcePiece, targetPiece);
+
+        verifyMovePosition(next, endPos, sourcePiece, chessBoard);
     }
-
-
 
     @Override
     protected Direction findDirection(int dx, int dy) {

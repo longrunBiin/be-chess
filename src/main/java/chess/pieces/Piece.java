@@ -1,6 +1,10 @@
 package chess.pieces;
 
+import static chess.Board.MAX_BOARD;
+
 import chess.Direction;
+import chess.Position;
+import chess.Rank;
 import java.util.List;
 import java.util.Objects;
 
@@ -114,7 +118,7 @@ abstract public class Piece {
         return color.equals(Color.BLACK);
     }
 
-    abstract public void verifyMovePosition(int startX, int startY, int endX, int endY);
+    abstract public void verifyMovePosition(Position startPos, Position endPos, Piece sourcePiece, List<Rank> chessBoard);
 
     abstract protected Direction findDirection(int dx, int dy);
 
@@ -132,10 +136,41 @@ abstract public class Piece {
                 .orElse(null);
     }
 
-    protected void checkPieceCanMove(Direction moveDirection) {
+    protected void checkPieceCanMove(Direction moveDirection, Piece piece) {
         if (moveDirection == null || !directionList.contains(moveDirection)) {
-            throw new IllegalArgumentException("기물의 이동 규칙을 위반했습니다.");
+            throw new IllegalArgumentException(piece.getName() + "의 이동 규칙을 위반했습니다.");
         }
+    }
+
+    protected void verifyPieceAlreadyOnBoard(Piece sourcePiece, Piece targetPiece) {
+        if(targetPiece.getColor().equals(sourcePiece.getColor())){
+            throw new IllegalArgumentException("같은 편이 있으면 이동할 수 없습니다.");
+        }
+    }
+
+    private void verifyEnemyAlreadyOnBoard(Piece targetPiece) {
+        if(!targetPiece.getName().equals(Type.NO_PIECE)){
+            throw new IllegalArgumentException("이동경로에 적이 있어 이동할 수 없습니다.");
+        }
+    }
+
+    protected Position verifyNextPosition(Position next, Position endPos, Piece sourcePiece, Piece targetPiece) {
+        verifyPieceAlreadyOnBoard(sourcePiece, targetPiece);
+        if(!endPos.equals(next))
+            verifyEnemyAlreadyOnBoard(targetPiece);
+        return next;
+    }
+
+    protected Position getNextPosition(Position startPos, Direction moveDirection) {
+        Position next = new Position(startPos.getXPos() + moveDirection.getXDegree(),
+                startPos.getYPos() + moveDirection.getYDegree());
+        return next;
+    }
+
+    protected Piece getTargetPiece(List<Rank> chessBoard, Position next) {
+        Rank endRank = chessBoard.get(MAX_BOARD - next.getYPos());
+        Piece targetPiece = endRank.getPieceByPosition(next.getXPos());
+        return targetPiece;
     }
 
     @Override
