@@ -1,16 +1,24 @@
 package chess.pieces;
 
-import static chess.Board.MAX_BOARD;
+import static chess.game.Board.MAX_BOARD;
 
-import chess.Direction;
-import chess.Position;
-import chess.Rank;
+import chess.game.Direction;
+import chess.game.Position;
+import chess.game.Rank;
 import java.util.List;
 import java.util.Objects;
 
 abstract public class Piece {
     public enum Color {
         WHITE, BLACK, NOCOLOR;
+
+        public static Color getColorByString(String color) {
+            return Color.valueOf(color.toUpperCase());
+        }
+        public Color getEnemyColor() {
+            if (this == WHITE) return BLACK;
+            return WHITE;
+        }
     }
 
     public enum Type {
@@ -123,7 +131,7 @@ abstract public class Piece {
     abstract protected Direction findDirection(int dx, int dy);
 
     protected Direction getDirectionByCurrent(int dx, int dy) {
-        return Direction.everyDirection().stream()
+        return directionList.stream()
                 .filter(d -> (d.getXDegree() == Integer.signum(dx) && d.getYDegree() == Integer.signum(dy)))
                 .findFirst()
                 .orElse(null);

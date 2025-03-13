@@ -1,4 +1,4 @@
-package chess;
+package chess.game;
 
 import chess.pieces.Piece;
 import chess.pieces.Piece.Color;
@@ -6,7 +6,9 @@ import chess.pieces.Piece.Type;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.springframework.stereotype.Component;
 
+@Component
 public class Rank {
     private final List<Piece> rank;
 
@@ -71,5 +73,12 @@ public class Rank {
                 .filter(piece -> piece.getColor().equals(color))
                 .sorted(Comparator.comparingDouble(Piece::getScore).reversed())
                 .collect(Collectors.toList());
+    }
+
+    public void clear() {
+        // 모든 위치를 빈 칸으로 설정
+        for (int i = 0; i < rank.size(); i++) {
+            rank.set(i, Piece.createBlank());
+        }
     }
 }

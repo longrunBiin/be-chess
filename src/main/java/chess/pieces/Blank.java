@@ -1,9 +1,9 @@
 package chess.pieces;
 
 
-import chess.Direction;
-import chess.Position;
-import chess.Rank;
+import chess.game.Direction;
+import chess.game.Position;
+import chess.game.Rank;
 import java.util.List;
 
 public class Blank extends Piece{

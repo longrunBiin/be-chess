@@ -1,5 +1,9 @@
 package chess;
 
+import chess.game.Board;
+import chess.game.ChessGame;
+import chess.game.ChessView;
+import chess.game.Rank;
 import chess.pieces.Piece;
 import chess.pieces.Piece.Type;
 import java.util.ArrayList;
