@@ -58,11 +58,19 @@ public class Board {
     }
 
     private void addBlackPawnToBoard() {
-        addRankToChessBoard(1, Piece.createBlack(Type.PAWN));
+        List<Piece> pieces = new ArrayList<>();
+        for (int i = 0; i < MAX_BOARD; i++) {
+             pieces.add(Piece.createBlack(Type.PAWN));
+        }
+        chessBoard.add(new Rank(pieces));
     }
 
     private void addWhitePawnToBoard() {
-        addRankToChessBoard(1, Piece.createWhite(Type.PAWN));
+        List<Piece> pieces = new ArrayList<>();
+        for (int i = 0; i < MAX_BOARD; i++) {
+            pieces.add(Piece.createWhite(Type.PAWN));
+        }
+        chessBoard.add(new Rank(pieces));
     }
 
     private void addBlankToBoard() {
