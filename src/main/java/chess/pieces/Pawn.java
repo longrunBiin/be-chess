@@ -37,7 +37,7 @@ public class Pawn extends Piece{
             }
         }else {
             // 첫 번째 이후에는 1칸만 전진 가능
-            if (dy == 1) {
+            if (dy == 1 || dy == -1) {
                 return;
             }
             throw new IllegalArgumentException("폰은 한 번 이동 후 1칸만 이동할 수 있습니다.");
