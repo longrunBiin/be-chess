@@ -9,10 +9,13 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebConfig implements WebMvcConfigurer {
     @Value("${BASE_URI}")
     private String baseUri;
+
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("http://" + baseUri + ":3000")
-                .allowedMethods("GET", "POST", "PUT", "DELETE");
+                .allowedOrigins("http://" + baseUri + ":3000") // 프론트엔드 URL
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS") // OPTIONS 추가
+                .allowedHeaders("*") // 모든 헤더 허용
+                .allowCredentials(true); // 쿠키 및 인증정보를 허용
     }
 }
