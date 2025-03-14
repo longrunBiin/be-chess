@@ -1,5 +1,6 @@
 package chess.springchess;
 
+import chess.game.AiService;
 import chess.game.Board;
 import chess.game.ChessGame;
 import chess.game.ChessView;
@@ -7,6 +8,7 @@ import chess.pieces.Piece;
 import chess.pieces.Piece.Color;
 import java.util.List;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,18 +23,21 @@ public class ChessController {
     private final ChessGame chessGame;
     private final Board board;
     private final ChessView chessView;
+    private final AiService aiService;
 
-    public ChessController(ChessGame chessGame, Board board, ChessView chessView) {
+    public ChessController(ChessGame chessGame, Board board, ChessView chessView, AiService aiService) {
         this.chessGame = chessGame;
         this.board = board;
         this.chessView = chessView;
+        this.aiService = aiService;
     }
 
-    @GetMapping(value = "/api/start")
-    public Result<ChessDto.initGameDto> startGame() {
+    @GetMapping(value = "/api/start/{difficulty}")
+    public Result<ChessDto.initGameDto> startGame(@PathVariable String difficulty) {
         // 보드 초기화 후 게임 상태 초기화
         board.initialize(); // 보드 초기화
         chessGame.reset();  // ChessGame 상태 초기화
+        aiService.setDifficulty(difficulty);
         return Result.onSuccess(ChessConverter.createInitGameDto(chessView.showBoard()), INIT_BOARD);
     }
 
@@ -49,6 +54,26 @@ public class ChessController {
             // 예외가 발생하면 Result 객체로 에러 메시지 반환
             return Result.onFailure(ChessConverter.createmovePieceDto(request.getStartPos(), request.getEndPos(), move), e.getMessage());
         }
+    }
+
+    @PostMapping("api/move/ai")
+    public Result<ChessDto.movePieceDto> aiMove() {
+        String gameState = chessView.showBoard(); // 현재 보드 상태
+        String[] aiMove = aiService.getMove(gameState);  // AI의 이동을 받음
+        String startPos = aiMove[0];
+        String endPos = aiMove[1];
+
+        // AI의 이동을 처리
+        Piece aiMovePiece = chessGame.move(startPos, endPos);  // AI가 이동한 기물 처리
+        boolean aiKingOnBoard = chessGame.checkKingOnBoard(aiMovePiece);
+
+        // AI가 움직인 후 게임 상태를 업데이트하고 결과를 반환
+        if (!aiKingOnBoard) {
+            return Result.onSuccess(ChessConverter.createmovePieceDto(startPos, endPos, aiMovePiece),
+                    "AI가 킹을 잡았습니다.");
+        }
+        return Result.onSuccess(ChessConverter.createmovePieceDto(startPos, endPos, aiMovePiece),
+                "AI의 이동: " + startPos + " -> " + endPos);
     }
 
     @GetMapping(value = "/api/result")
