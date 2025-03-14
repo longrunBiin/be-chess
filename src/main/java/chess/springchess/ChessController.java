@@ -32,12 +32,13 @@ public class ChessController {
         this.aiService = aiService;
     }
 
-    @GetMapping(value = "/api/start/{difficulty}")
-    public Result<ChessDto.initGameDto> startGame(@PathVariable String difficulty) {
+    @GetMapping(value = "/api/start")
+    public Result<ChessDto.initGameDto> startGame(@RequestParam String difficulty) {
         // 보드 초기화 후 게임 상태 초기화
         board.initialize(); // 보드 초기화
         chessGame.reset();  // ChessGame 상태 초기화
-        aiService.setDifficulty(difficulty);
+        if (difficulty != null)
+            aiService.setDifficulty(difficulty);
         return Result.onSuccess(ChessConverter.createInitGameDto(chessView.showBoard()), INIT_BOARD);
     }
 
