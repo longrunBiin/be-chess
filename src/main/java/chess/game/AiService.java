@@ -54,8 +54,11 @@ public class AiService {
     private String generatePrompt(String gameState) {
         // 난이도에 따른 프롬프트 생성
         return "The current board state is:\n" + gameState +
-                "\nMake a move according to the " + difficulty + " difficulty.\n" +
-                "Provide the move only in the format 'start_position end_position' (e.g., 'e2 e4'). Do not provide any additional text.";
+                "\nEach '.' represents an empty square. Pieces are represented by Unicode characters." +
+                "\nDo not attempt to move empty squares. Only move valid chess pieces according to standard chess rules." +
+                "\nMake a move according to the " + difficulty + " difficulty." +
+                "\nProvide the move only in the format 'start_position end_position' (e.g., 'e2 e4'). Do not provide any additional text.";
+
     }
 
     private String[] parseMoveFromResponse(String response) {
