@@ -58,8 +58,17 @@ public class AiService {
                 "\nEach '.' represents an empty square. Pieces are represented by Unicode characters." +
                 "\nDo not attempt to move empty squares. Only move valid chess pieces according to standard chess rules." +
                 "\nYou can only move pieces that belong to the player with the color '" + color + "'." +
+                "\nFollow these standard chess rules when making a move:" +
+                "\n  - Pawns move forward one square but capture diagonally. On their first move, they can move two squares forward." +
+                "\n  - Knights move in an 'L' shape: two squares in one direction and then one square perpendicular." +
+                "\n  - Bishops move diagonally any number of squares." +
+                "\n  - Rooks move horizontally or vertically any number of squares." +
+                "\n  - Queens can move diagonally, horizontally, or vertically any number of squares." +
+                "\n  - Kings move one square in any direction and can castle under specific conditions." +
+                "\nEnsure the move is legal and does not leave the king in check." +
                 "\nMake a move according to the " + difficulty + " difficulty." +
                 "\nProvide the move only in the format 'start_position end_position' (e.g., 'e2 e4'). Do not provide any additional text.";
+
 
 
     }
