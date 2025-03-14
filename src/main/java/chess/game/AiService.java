@@ -18,6 +18,7 @@ public class AiService {
     private String openaiApiKey;
 
     private String difficulty;
+    private String color;
     private static final String OPENAI_API_URL = "https://api.openai.com/v1/chat/completions";
 
     public String[] getMove(String gameState) {
@@ -56,8 +57,10 @@ public class AiService {
         return "The current board state is:\n" + gameState +
                 "\nEach '.' represents an empty square. Pieces are represented by Unicode characters." +
                 "\nDo not attempt to move empty squares. Only move valid chess pieces according to standard chess rules." +
+                "\nYou can only move pieces that belong to the player with the color '" + color + "'." +
                 "\nMake a move according to the " + difficulty + " difficulty." +
                 "\nProvide the move only in the format 'start_position end_position' (e.g., 'e2 e4'). Do not provide any additional text.";
+
 
     }
 
@@ -76,5 +79,9 @@ public class AiService {
 
     public void setDifficulty(String difficulty) {
         this.difficulty = difficulty;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
     }
 }
